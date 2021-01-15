@@ -1,0 +1,18 @@
+{
+  "name": "akeneo-api",
+  "version": "1.0.0",
+  "description": "A Node Rest Client for the Akeneo PIM",
+  "main": "index.js",
+  "author": "Jens Verbeken",
+  "license": "MIT",
+  "type": "module",
+  "exports": "./index.js",
+  "engines": {
+    "node": ">=15"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "qs": "^6.9.6",
+    "ramda": "^0.27.1"
+  }
+}
