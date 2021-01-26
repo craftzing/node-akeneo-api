@@ -11,7 +11,9 @@
     "node": ">=15"
   },
   "scripts": {
-    "tsc": "tsc"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "build:docs": "typedoc"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -21,14 +21,16 @@ const FAMILIES = "/api/rest/v1/families";
  * Create a client instance
  * @param params - Client initialization parameters
  *
- * @example
+ * ```javascript
  * const client = akeneo({
  *   baseURL: AKENEO_API_URL,
  *   username: AKENEO_USERNAME,
  *   password: AKENEO_PASSWORD,
  *   clientId: AKENEO_CLIENT_ID,
  *   secret: AKENEO_SECRET,
- * });= */
+ * });
+ * ```
+ */
 export const createClient = (params: ClientParams) => {
   const http = createHttpClient(params);
 
@@ -58,17 +60,17 @@ export const createClient = (params: ClientParams) => {
     }
   };
 
-  // const wrapper = async (Fn) => {
-  //   try {
-  //     Fn();
-  //   } catch (error) {
-  //     if (error.isAxiosError) {
-  //       errorHandler(error);
-  //     } else {
-  //       throw error;
-  //     }
-  //   }
-  // };
+  const wrap = async (Fn: Function) => {
+    try {
+      return await Fn();
+    } catch (error) {
+      if (error.isAxiosError) {
+        errorHandler(error);
+      } else {
+        throw error;
+      }
+    }
+  };
   const getAllByPage = async ({
     path,
     page = 1,
@@ -144,12 +146,13 @@ export const createClient = (params: ClientParams) => {
       http,
     },
     category: {
-      get: (id: string) => get({ path: CATEGORIES_PATH, id }),
+      get: (id: string) => wrap(() => get({ path: CATEGORIES_PATH, id })),
       getAll: () => getAllByPage({ path: CATEGORIES_PATH }),
     },
     productModel: {
       get: (id: string) => get({ path: PRODUCT_MODEL_PATH, id }),
-      getAll: () => getAllByPage({ path: PRODUCT_MODEL_PATH }),
+      getAll: () =>
+        wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH + "dfda" })),
     },
     product: {
       get: (id: string) => get({ path: PRODUCT_PATH, id }),

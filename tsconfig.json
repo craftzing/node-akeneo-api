@@ -69,5 +69,16 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["index.ts"]
+  "include": ["index.ts"],
+
+  "typedocOptions": {
+    "entryPoints": ["index.ts", "lib"],
+    "readme": "README.md",
+    "name": "akeneo-api.js",
+    "includeVersion": true,
+    "hideGenerator": true,
+    "excludePrivate": true,
+    "categorizeByGroup": true,
+    "toc": ["createClient", "ClientParams"]
+  }
 }
