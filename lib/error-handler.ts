@@ -1,6 +1,7 @@
 import { path } from "ramda";
+import { AxiosError } from "axios";
 
-export default function errorHandler(errorResponse) {
+export default function errorHandler(errorResponse: AxiosError): never {
   const { config, response } = errorResponse;
   let errorName;
 
@@ -12,7 +13,14 @@ export default function errorHandler(errorResponse) {
 
   const data = response?.data;
 
-  const errorData = {
+  const errorData: {
+    status?: number;
+    statusText?: string;
+    requestId?: string;
+    message: string;
+    details: object;
+    request?: object;
+  } = {
     status: response?.status,
     statusText: response?.statusText,
     message: "",
@@ -40,7 +48,7 @@ export default function errorHandler(errorResponse) {
   try {
     error.message = JSON.stringify(errorData, null, "  ");
   } catch {
-    error.message = path(errorData, ["message"], "");
+    error.message = path(["message"], errorData) || "";
   }
   throw error;
 }

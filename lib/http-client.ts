@@ -1,13 +1,20 @@
 import qs from "qs";
-import axios from "axios";
-import { isNode, getNodeVersion } from "./utils.js";
+import axios, { AxiosInstance } from "axios";
+import { isNode, getNodeVersion } from "./utils";
+import { ClientParams } from "./types";
 
-const createHttpClient = (options) => {
-  let accessToken;
+/**
+ * Create pre configured axios instance
+ * @private
+ * @param {ClientParams} options - Initialization parameters for the HTTP client
+ * @return {AxiosInstance} Initialized axios instance
+ */
+const createHttpClient = (options: ClientParams): AxiosInstance => {
+  let accessToken: string;
   const defaultConfig = {
     insecure: false,
     retryOnError: true,
-    logHandler: (level, data) => {
+    logHandler: (level: string, data: any): void => {
       if (level === "error" && data) {
         const title = [data.name, data.message].filter((a) => a).join(" - ");
         console.error(`[error] ${title}`);
@@ -17,11 +24,11 @@ const createHttpClient = (options) => {
       console.log(`[${level}] ${data}`);
     },
     // Passed to axios
-    headers: {},
+    headers: {} as Record<string, unknown>,
     httpAgent: false,
     httpsAgent: false,
     timeout: 30000,
-    proxy: false,
+    proxy: false as const,
     basePath: "",
     adapter: undefined,
     maxContentLength: 1073741824, // 1GB
@@ -53,12 +60,12 @@ const createHttpClient = (options) => {
     maxContentLength: config.maxContentLength,
     // Contentful
     logHandler: config.logHandler,
-    responseLogger: config.responseLogger,
-    requestLogger: config.requestLogger,
+    // responseLogger: config.responseLogger,
+    // requestLogger: config.requestLogger,
     retryOnError: config.retryOnError,
   };
 
-  const instance = axios.create(axiosOptions);
+  const instance = axios.create(axiosOptions) as AxiosInstance;
 
   const TOKEN_PATH = "/api/oauth/v1/token";
 
