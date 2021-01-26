@@ -1,5 +1,9 @@
 ## Akeneo API
 
+This is an unofficial attempt at a Node client for the Akeneo PIM REST API.
+
+More info at https://api.akeneo.com/api-reference-index.html
+
 ### Installation
 
 - run `yarn link` in this folder

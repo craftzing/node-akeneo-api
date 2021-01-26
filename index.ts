@@ -7,7 +7,15 @@
 import { last } from "ramda";
 import errorHandler from "./lib/error-handler";
 import createHttpClient from "./lib/http-client";
-import { ClientParams } from "./lib/types";
+import {
+  ClientParams,
+  ProductModel,
+  Family,
+  Variant,
+  Attribute,
+  EntityRecord,
+  Category,
+} from "./lib/types";
 
 const CATEGORIES_PATH = "/api/rest/v1/categories";
 const PRODUCT_MODEL_PATH = "/api/rest/v1/product-models";
@@ -146,20 +154,20 @@ export const createClient = (params: ClientParams) => {
       http,
     },
     category: {
-      get: (id: string) => wrap(() => get({ path: CATEGORIES_PATH, id })),
-      getAll: () => getAllByPage({ path: CATEGORIES_PATH }),
+      get: (id: string): Promise<Category> =>
+        wrap(() => get({ path: CATEGORIES_PATH, id })),
+      getAll: (): Promise<Category[]> =>
+        getAllByPage({ path: CATEGORIES_PATH }),
     },
     productModel: {
-      get: (id: string) => get({ path: PRODUCT_MODEL_PATH, id }),
-      getAll: () =>
-        wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH + "dfda" })),
+      get: (id: string): Promise<ProductModel> =>
+        get({ path: PRODUCT_MODEL_PATH, id }),
+      getAll: (): Promise<ProductModel[]> =>
+        wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
     },
     product: {
       get: (id: string) => get({ path: PRODUCT_PATH, id }),
       getAll: () => getAllByPage({ path: PRODUCT_PATH }),
-    },
-    attribute: {
-      getAll: () => getAllByPage({ path: ATTRIBUTES }),
     },
     attributeOption: {
       getAll: (attribute: string) =>
@@ -177,7 +185,7 @@ export const createClient = (params: ClientParams) => {
     },
     referenceEntities: {
       getMany: () => getMany({ path: REFERENCE_ENTITIES }),
-      getRecords: (id: string) =>
+      getRecords: (id: string): Promise<EntityRecord[]> =>
         getMany({ path: `${REFERENCE_ENTITIES}/${id}/records` }),
 
       add: async ({ code, body }: { code: string; body: any }) =>
@@ -227,8 +235,8 @@ export const createClient = (params: ClientParams) => {
       },
     },
     families: {
-      getMany: () => getMany({ path: FAMILIES }),
-      getVariants: (id: string) =>
+      getMany: (): Promise<Family[]> => getMany({ path: FAMILIES }),
+      getVariants: (id: string): Promise<Variant[]> =>
         getMany({ path: `${FAMILIES}/${id}/variants` }),
     },
     attributes: {
@@ -247,6 +255,8 @@ export const createClient = (params: ClientParams) => {
           `${ATTRIBUTES}/${attributeCode}/options/${code}`,
           option
         ),
+
+      getAll: (): Promise<Attribute[]> => getAllByPage({ path: ATTRIBUTES }),
     },
   };
 };
