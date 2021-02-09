@@ -15,6 +15,11 @@ import {
   Attribute,
   EntityRecord,
   Category,
+  AttributeOption,
+  Asset,
+  Entity,
+  Product,
+  AkeneoClient,
 } from "./lib/types";
 
 const CATEGORIES_PATH = "/api/rest/v1/categories";
@@ -39,7 +44,7 @@ const FAMILIES = "/api/rest/v1/families";
  * });
  * ```
  */
-export const createClient = (params: ClientParams) => {
+export const createClient = (params: ClientParams): AkeneoClient => {
   const http = createHttpClient(params);
 
   const get = async ({ path, id }: { path: string; id?: String }) => {
@@ -129,7 +134,7 @@ export const createClient = (params: ClientParams) => {
       }
     );
     const lastItem = last(data._embedded.items);
-
+    console.log(data._links?.next?.href);
     if (data._links?.next?.href) {
       return [
         ...data._embedded.items,
@@ -166,39 +171,28 @@ export const createClient = (params: ClientParams) => {
         wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
     },
     product: {
-      get: (id: string) => get({ path: PRODUCT_PATH, id }),
-      getAll: () => getAllByPage({ path: PRODUCT_PATH }),
-    },
-    attributeOption: {
-      getAll: (attribute: string) =>
-        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
+      get: (id: string): Promise<Product> => get({ path: PRODUCT_PATH, id }),
+      getAll: (): Promise<Product[]> => getAllByPage({ path: PRODUCT_PATH }),
     },
     assetFamily: {
       get: (code: string) => get({ path: ASSET_FAMILIES, id: code }),
       getAll: () => getAllByPage({ path: ASSET_FAMILIES }),
     },
     assets: {
-      getAll: (assetFamilyCode: string) =>
+      getAll: (assetFamilyCode: string): Promise<Asset[]> =>
         getAllBySearchAfter({
           path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets`,
         }),
+      get: (assetFamilyCode: string, code: string): Promise<Asset[]> =>
+        get({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets/${code}` }),
     },
     referenceEntities: {
-      getMany: () => getMany({ path: REFERENCE_ENTITIES }),
+      getMany: (): Promise<Entity[]> => getMany({ path: REFERENCE_ENTITIES }),
       getRecords: (id: string): Promise<EntityRecord[]> =>
         getMany({ path: `${REFERENCE_ENTITIES}/${id}/records` }),
-
-      add: async ({ code, body }: { code: string; body: any }) =>
+      add: async ({ code, body }) =>
         await http.patch(`/api/rest/v1/reference-entities/${code}`, body),
-      addAttribute: async ({
-        referenceEntityCode,
-        code,
-        attribute,
-      }: {
-        referenceEntityCode: string;
-        code: string;
-        attribute: any;
-      }) => {
+      addAttribute: async ({ referenceEntityCode, code, attribute }) => {
         const { data } = await http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/attributes/${code}`,
           attribute
@@ -209,24 +203,13 @@ export const createClient = (params: ClientParams) => {
         attributeCode,
         code,
         option,
-      }: {
-        referenceEntityCode: string;
-        attributeCode: string;
-        code: string;
-        option: any;
       }) => {
         const { data } = await http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/attributes/${attributeCode}/options/${code}`,
           option
         );
       },
-      addRecords: async ({
-        referenceEntityCode,
-        records,
-      }: {
-        referenceEntityCode: string;
-        records: any[];
-      }) => {
+      addRecords: async ({ referenceEntityCode, records }) => {
         const { data } = await http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/records`,
           records
@@ -235,30 +218,38 @@ export const createClient = (params: ClientParams) => {
       },
     },
     families: {
-      getMany: (): Promise<Family[]> => getMany({ path: FAMILIES }),
+      getMany: () => getMany({ path: FAMILIES }),
       getVariants: (id: string): Promise<Variant[]> =>
         getMany({ path: `${FAMILIES}/${id}/variants` }),
     },
     attributes: {
-      add: async ({ code, attribute }: { code: string; attribute: any }) =>
+      add: async ({ code, attribute }) =>
         await http.patch(`${ATTRIBUTES}/${code}`, attribute),
-      addOption: async ({
-        attributeCode,
-        code,
-        option,
-      }: {
-        attributeCode: string;
-        code: string;
-        option: any;
-      }) =>
+      addOption: async ({ attributeCode, code, option }) =>
         await http.patch(
           `${ATTRIBUTES}/${attributeCode}/options/${code}`,
           option
         ),
-
-      getAll: (): Promise<Attribute[]> => getAllByPage({ path: ATTRIBUTES }),
+      getAll: () => getAllByPage({ path: ATTRIBUTES }),
+      getOptions: (attribute) =>
+        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
     },
   };
 };
 
 export default createClient;
+
+export {
+  ClientParams,
+  ProductModel,
+  Family,
+  Variant,
+  Attribute,
+  EntityRecord,
+  Category,
+  AttributeOption,
+  Asset,
+  Entity,
+  Product,
+  AkeneoClient,
+};

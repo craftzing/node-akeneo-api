@@ -1,3 +1,5 @@
+import { AxiosInstance, AxiosResponse } from "axios";
+
 export type ClientParams = {
   /**
    * API host
@@ -21,17 +23,113 @@ export type ClientParams = {
   secret: string;
 };
 
+export type AkeneoClient = {
+  raw: {
+    http: AxiosInstance;
+  };
+  category: {};
+  productModel: {};
+  product: {};
+  assetFamily: {};
+  attributes: {
+    getAll: () => Promise<Attribute[]>;
+    getOptions: (attribute: string) => Promise<AttributeOption[]>;
+    add: ({
+      code,
+      attribute,
+    }: {
+      code: string;
+      attribute: any;
+    }) => Promise<AxiosResponse<any>>;
+    addOption: ({
+      attributeCode,
+      code,
+      option,
+    }: {
+      attributeCode: string;
+      code: string;
+      option: any;
+    }) => Promise<AxiosResponse<any>>;
+  };
+  referenceEntities: {
+    getMany: () => Promise<Entity[]>;
+    getRecords: (id: string) => Promise<EntityRecord[]>;
+    add: ({
+      code,
+      body,
+    }: {
+      code: string;
+      body: any;
+    }) => Promise<AxiosResponse<any>>;
+    addAttribute: ({
+      referenceEntityCode,
+      code,
+      attribute,
+    }: {
+      referenceEntityCode: string;
+      code: string;
+      attribute: any;
+    }) => Promise<void>;
+    addAttributeOption: ({
+      referenceEntityCode,
+      attributeCode,
+      code,
+      option,
+    }: {
+      referenceEntityCode: string;
+      attributeCode: string;
+      code: string;
+      option: any;
+    }) => Promise<void>;
+    addRecords: ({
+      referenceEntityCode,
+      records,
+    }: {
+      referenceEntityCode: string;
+      records: any[];
+    }) => Promise<void>;
+  };
+  families: {
+    getMany: () => Promise<Family[]>;
+    getVariants: (id: string) => Promise<Variant[]>;
+  };
+  assets: {
+    getAll: (assetFamilyCode: string) => Promise<Asset[]>;
+    get: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
+  };
+};
+
+type Assocation = {
+  products: string[];
+  product_models: string[];
+  groups: string[];
+};
 export type ProductModel = {
   code: string;
   family: string;
   family_variant: string;
   parent?: string;
   categories: string[];
-  values: Object;
+  values: Record<string, any>;
   created: string;
   updated: string;
-  associations: Object;
-  quantified_assoications: Object;
+  associations: Record<string, Assocation>;
+  quantified_assoications: Record<string, Assocation>;
+  metadata: Object;
+};
+
+export type Product = {
+  identifier: string;
+  enabled: boolean;
+  family: string;
+  categories: string[];
+  groups: string[];
+  parent: string;
+  values: Record<string, any>;
+  associations: Record<string, Assocation>;
+  created: string;
+  updated: string;
+  quantified_assoications: Record<string, Assocation>;
   metadata: Object;
 };
 
@@ -44,9 +142,14 @@ export type Family = {
   labels: Object;
 };
 
+type VariantAttributeSet = {
+  level: number;
+  attributes: string[];
+  axes: string[];
+};
 export type Variant = {
   code: string;
-  variant_attribute_sets: Object[];
+  variant_attribute_sets: VariantAttributeSet[];
   labels: Object;
 };
 
@@ -80,14 +183,26 @@ export type Attribute = {
   default_value: boolean;
 };
 
-type EntityRecordValue = {
+export type AttributeOption = {
+  code: string;
+  attribute: string;
+  sort_order: number;
+  labels: Record<string, string>;
+};
+
+type ValuesRecord = {
   locale: string;
   channel: string;
-  data: object;
+  data: string | string[];
+};
+
+export type Entity = {
+  code: string;
+  labels: KeyValueMap;
 };
 export type EntityRecord = {
   code: string;
-  values: Record<string, EntityRecordValue>;
+  values: Record<string, ValuesRecord[]>;
 };
 
 export declare type KeyValueMap = Record<string, any>;
@@ -96,4 +211,9 @@ export type Category<T = KeyValueMap> = {
   code: string;
   parent?: string;
   labels: T;
+};
+
+export type Asset = {
+  code: string;
+  values: Record<string, ValuesRecord[]>;
 };

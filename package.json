@@ -2,17 +2,23 @@
   "name": "akeneo-api",
   "version": "1.0.0",
   "description": "A Node Rest Client for the Akeneo PIM",
-  "main": "dist",
   "author": "Jens Verbeken",
   "license": "MIT",
-  "type": "module",
-  "exports": "./dist/index.js",
+  "main": "dist/esm/lib/index.ts",
+  "types": "dist/esm/lib/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
   "engines": {
     "node": ">=15"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "build:docs": "typedoc"
   },
   "dependencies": {
