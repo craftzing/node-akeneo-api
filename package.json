@@ -4,10 +4,9 @@
   "description": "A Node Rest Client for the Akeneo PIM",
   "author": "Jens Verbeken",
   "license": "MIT",
-  "main": "dist/esm/lib/index.ts",
-  "types": "dist/esm/lib/index.d.ts",
+  "types": "dist/esm/index.d.ts",
   "exports": {
-    "import": "./dist/esm/index.js",
+    "import": "./dist/esm/index.mjs",
     "require": "./dist/cjs/index.js"
   },
   "engines": {

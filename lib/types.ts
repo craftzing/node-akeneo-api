@@ -27,10 +27,23 @@ export type AkeneoClient = {
   raw: {
     http: AxiosInstance;
   };
-  category: {};
+  category: {
+    get: (id: string) => Promise<Category>;
+    getAll: () => Promise<Category[]>;
+  };
   productModel: {};
-  product: {};
-  assetFamily: {};
+  product: {
+    get: (id: string) => Promise<Product>;
+    getAll: () => Promise<Product[]>;
+  };
+  assetFamily: {
+    get: (code: string) => Promise<AssetFamily>;
+    getAll: () => Promise<AssetFamily[]>;
+  };
+  assets: {
+    getAll: (assetFamilyCode: string) => Promise<Asset[]>;
+    get: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
+  };
   attributes: {
     getAll: () => Promise<Attribute[]>;
     getOptions: (attribute: string) => Promise<AttributeOption[]>;
@@ -92,10 +105,6 @@ export type AkeneoClient = {
   families: {
     getMany: () => Promise<Family[]>;
     getVariants: (id: string) => Promise<Variant[]>;
-  };
-  assets: {
-    getAll: (assetFamilyCode: string) => Promise<Asset[]>;
-    get: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
   };
 };
 
@@ -211,6 +220,23 @@ export type Category<T = KeyValueMap> = {
   code: string;
   parent?: string;
   labels: T;
+};
+
+export type AssetFamily = {
+  code: string;
+  labels: Record<string, string>;
+  attribute_as_main_media: string;
+  product_link_rules: Record<string, Record<string, string>>[];
+  transformations: any[];
+  naming_convention: {
+    source: {
+      property: string;
+      channel: any;
+      locale: any;
+    };
+    pattern: string;
+    abort_asset_creation_on_error: boolean;
+  };
 };
 
 export type Asset = {

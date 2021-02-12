@@ -159,10 +159,8 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       http,
     },
     category: {
-      get: (id: string): Promise<Category> =>
-        wrap(() => get({ path: CATEGORIES_PATH, id })),
-      getAll: (): Promise<Category[]> =>
-        getAllByPage({ path: CATEGORIES_PATH }),
+      get: (id) => wrap(() => get({ path: CATEGORIES_PATH, id })),
+      getAll: () => getAllByPage({ path: CATEGORIES_PATH }),
     },
     productModel: {
       get: (id: string): Promise<ProductModel> =>
@@ -171,11 +169,11 @@ export const createClient = (params: ClientParams): AkeneoClient => {
         wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
     },
     product: {
-      get: (id: string): Promise<Product> => get({ path: PRODUCT_PATH, id }),
-      getAll: (): Promise<Product[]> => getAllByPage({ path: PRODUCT_PATH }),
+      get: (id) => get({ path: PRODUCT_PATH, id }),
+      getAll: () => getAllByPage({ path: PRODUCT_PATH }),
     },
     assetFamily: {
-      get: (code: string) => get({ path: ASSET_FAMILIES, id: code }),
+      get: (code) => get({ path: ASSET_FAMILIES, id: code }),
       getAll: () => getAllByPage({ path: ASSET_FAMILIES }),
     },
     assets: {
@@ -185,6 +183,18 @@ export const createClient = (params: ClientParams): AkeneoClient => {
         }),
       get: (assetFamilyCode: string, code: string): Promise<Asset[]> =>
         get({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets/${code}` }),
+    },
+    attributes: {
+      add: async ({ code, attribute }) =>
+        await http.patch(`${ATTRIBUTES}/${code}`, attribute),
+      addOption: async ({ attributeCode, code, option }) =>
+        await http.patch(
+          `${ATTRIBUTES}/${attributeCode}/options/${code}`,
+          option
+        ),
+      getAll: () => getAllByPage({ path: ATTRIBUTES }),
+      getOptions: (attribute) =>
+        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
     },
     referenceEntities: {
       getMany: (): Promise<Entity[]> => getMany({ path: REFERENCE_ENTITIES }),
@@ -221,18 +231,6 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       getMany: () => getMany({ path: FAMILIES }),
       getVariants: (id: string): Promise<Variant[]> =>
         getMany({ path: `${FAMILIES}/${id}/variants` }),
-    },
-    attributes: {
-      add: async ({ code, attribute }) =>
-        await http.patch(`${ATTRIBUTES}/${code}`, attribute),
-      addOption: async ({ attributeCode, code, option }) =>
-        await http.patch(
-          `${ATTRIBUTES}/${attributeCode}/options/${code}`,
-          option
-        ),
-      getAll: () => getAllByPage({ path: ATTRIBUTES }),
-      getOptions: (attribute) =>
-        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
     },
   };
 };
