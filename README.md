@@ -4,6 +4,11 @@ This is an unofficial attempt at a Node client for the Akeneo PIM REST API.
 
 More info at https://api.akeneo.com/api-reference-index.html
 
+### Features
+
+- Easy typed access to your Akeneo environment
+- Built in token handlinge
+
 ### Installation
 
 - run `yarn link` in this folder
