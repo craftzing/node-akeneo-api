@@ -23,6 +23,14 @@ export type ClientParams = {
   secret: string;
 };
 
+export type ProductModelQueryParameters = {
+  search?: string;
+};
+
+export type ProductQueryParameters = {
+  search?: string;
+};
+
 export type AkeneoClient = {
   raw: {
     http: AxiosInstance;
@@ -31,9 +39,14 @@ export type AkeneoClient = {
     get: (id: string) => Promise<Category>;
     getAll: () => Promise<Category[]>;
   };
-  productModel: {};
+  productModel: {
+    getOne: (id: string) => Promise<ProductModel>;
+    get: (query: ProductModelQueryParameters) => Promise<ProductModel[]>;
+    getAll: () => Promise<ProductModel[]>;
+  };
   product: {
-    get: (id: string) => Promise<Product>;
+    getOne: (id: string) => Promise<Product>;
+    get: (query: ProductQueryParameters) => Promise<Product[]>;
     getAll: () => Promise<Product[]>;
   };
   assetFamily: {
@@ -43,6 +56,12 @@ export type AkeneoClient = {
   assets: {
     getAll: (assetFamilyCode: string) => Promise<Asset[]>;
     get: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
+  };
+  assetMediaFiles: {
+    get: (code: string) => Promise<any>;
+  };
+  referenceEntitiesMediaFiles: {
+    get: (code: string) => Promise<any>;
   };
   attributes: {
     getAll: () => Promise<Attribute[]>;

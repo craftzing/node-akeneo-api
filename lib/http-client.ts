@@ -1,5 +1,5 @@
 import qs from "qs";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { isNode, getNodeVersion } from "./utils";
 import { ClientParams } from "./types";
 
@@ -10,7 +10,8 @@ import { ClientParams } from "./types";
  * @return {AxiosInstance} Initialized axios instance
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
-  let accessToken: string;
+  let accessToken: string = "invalid";
+  let expiresAt: number;
   const defaultConfig = {
     insecure: false,
     retryOnError: true,
@@ -58,7 +59,6 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     timeout: config.timeout,
     adapter: config.adapter,
     maxContentLength: config.maxContentLength,
-    // Contentful
     logHandler: config.logHandler,
     // responseLogger: config.responseLogger,
     // requestLogger: config.requestLogger,
@@ -75,6 +75,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
   const base64Encoded = base64EncodedBuffer.toString("base64");
 
   const getAccessToken = async () => {
+    // if no accessToken or accessToken will soon expire (in less than 60 seconds)
     if (!accessToken) {
       const tokenResult = await axios.post(
         `${baseURL}${TOKEN_PATH}`,
@@ -94,6 +95,26 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     }
     return accessToken;
   };
+
+  instance.interceptors.response.use(
+    (response: AxiosResponse) => {
+      return response;
+    },
+    async function (error) {
+      const originalRequest = error.config;
+      if (
+        (error.response.status === 403 || error.response.status === 401) &&
+        !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+        accessToken = "";
+        originalRequest.headers.Authorization =
+          "Bearer " + (await getAccessToken());
+        return instance(originalRequest);
+      }
+      return Promise.reject(error);
+    }
+  );
 
   instance.interceptors.request.use(function (config) {
     return getAccessToken().then((accessToken) => {

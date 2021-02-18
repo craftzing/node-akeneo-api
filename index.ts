@@ -27,6 +27,9 @@ const PRODUCT_MODEL_PATH = "/api/rest/v1/product-models";
 const PRODUCT_PATH = "/api/rest/v1/products";
 const ATTRIBUTES = "/api/rest/v1/attributes";
 const ASSET_FAMILIES = "/api/rest/v1/asset-families";
+const ASSET_MEDIA_FILES = "/api/rest/v1/asset-media-files";
+const REFERENCE_ENTITIES_MEDIA_FILES =
+  "/api/rest/v1/reference-entities-media-files";
 const REFERENCE_ENTITIES = "/api/rest/v1/reference-entities";
 const FAMILIES = "/api/rest/v1/families";
 
@@ -47,9 +50,23 @@ const FAMILIES = "/api/rest/v1/families";
 export const createClient = (params: ClientParams): AkeneoClient => {
   const http = createHttpClient(params);
 
+  const getBinary = async ({ path, id }: { path: string; id?: String }) => {
+    try {
+      const data = await http.get(`${path}${id ? "/" + id : ""}`, {
+        responseType: "arraybuffer",
+      });
+      return data;
+    } catch (error) {
+      if (error.isAxiosError) {
+        errorHandler(error);
+      } else {
+        throw error;
+      }
+    }
+  };
   const get = async ({ path, id }: { path: string; id?: String }) => {
     try {
-      const { data } = await http.get(`${path}/${id}`);
+      const { data } = await http.get(`${path}${id ? "/" + id : ""}`);
       return data;
     } catch (error) {
       if (error.isAxiosError) {
@@ -87,7 +104,9 @@ export const createClient = (params: ClientParams): AkeneoClient => {
   const getAllByPage = async ({
     path,
     page = 1,
+    search,
   }: {
+    search?: string;
     path: string;
     page?: number;
   }): Promise<any[]> => {
@@ -97,12 +116,13 @@ export const createClient = (params: ClientParams): AkeneoClient => {
         with_count: true,
         limit: 100,
         page,
+        search,
       },
     });
     if (data.items_count / 100 > page) {
       return [
         ...data._embedded.items,
-        ...(await getAllByPage({ path, page: page + 1 })),
+        ...(await getAllByPage({ path, search, page: page + 1 })),
       ];
     }
     return data._embedded.items;
@@ -163,13 +183,13 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       getAll: () => getAllByPage({ path: CATEGORIES_PATH }),
     },
     productModel: {
-      get: (id: string): Promise<ProductModel> =>
-        get({ path: PRODUCT_MODEL_PATH, id }),
-      getAll: (): Promise<ProductModel[]> =>
-        wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
+      getOne: (id) => get({ path: PRODUCT_MODEL_PATH, id }),
+      get: (query) => getAllByPage({ path: PRODUCT_MODEL_PATH, ...query }),
+      getAll: () => wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
     },
     product: {
-      get: (id) => get({ path: PRODUCT_PATH, id }),
+      getOne: (id) => get({ path: PRODUCT_PATH, id }),
+      get: (query) => getAllByPage({ path: PRODUCT_PATH, ...query }),
       getAll: () => getAllByPage({ path: PRODUCT_PATH }),
     },
     assetFamily: {
@@ -183,6 +203,19 @@ export const createClient = (params: ClientParams): AkeneoClient => {
         }),
       get: (assetFamilyCode: string, code: string): Promise<Asset[]> =>
         get({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets/${code}` }),
+    },
+    assetMediaFiles: {
+      get: async (code: string) => {
+        return await getBinary({ path: ASSET_MEDIA_FILES, id: code });
+      },
+    },
+    referenceEntitiesMediaFiles: {
+      get: async (code: string) => {
+        return await getBinary({
+          path: REFERENCE_ENTITIES_MEDIA_FILES,
+          id: code,
+        });
+      },
     },
     attributes: {
       add: async ({ code, attribute }) =>
