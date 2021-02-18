@@ -25,6 +25,7 @@ const akeneo = client({
   password,
   clientId,
   secret
+  // Optionally you can also pass in axiosOptions which will be passed to the Axios instance
 });
 
 console.log(await akeneo.productModels.getAll());

@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosResponse } from "axios";
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export type ClientParams = {
   /**
@@ -21,6 +21,8 @@ export type ClientParams = {
    * matching secret
    */
   secret: string;
+
+  axiosOptions?: AxiosRequestConfig;
 };
 
 export type ProductModelQueryParameters = {

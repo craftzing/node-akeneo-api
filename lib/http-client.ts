@@ -11,7 +11,7 @@ import { ClientParams } from "./types";
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken: string = "invalid";
-  let expiresAt: number;
+
   const defaultConfig = {
     insecure: false,
     retryOnError: true,
@@ -24,7 +24,6 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
       }
       console.log(`[${level}] ${data}`);
     },
-    // Passed to axios
     headers: {} as Record<string, unknown>,
     httpAgent: false,
     httpsAgent: false,
@@ -34,55 +33,39 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     adapter: undefined,
     maxContentLength: 1073741824, // 1GB
   };
-  const config = {
-    ...defaultConfig,
-    ...options,
-  };
 
   const { baseURL } = options;
+  const axiosConfig = {
+    ...defaultConfig,
+    ...(options.axiosOptions || {}),
+    baseURL,
+    paramsSerializer: qs.stringify,
+  };
 
   // Set these headers only for node because browsers don't like it when you
   // override user-agent or accept-encoding.
   if (isNode()) {
-    config.headers["user-agent"] = `node.js/${getNodeVersion()}`;
-    config.headers["Accept-Encoding"] = "gzip";
+    axiosConfig.headers["user-agent"] = `node.js/${getNodeVersion()}`;
+    axiosConfig.headers["Accept-Encoding"] = "gzip";
   }
 
-  const axiosOptions = {
-    // Axios
-    baseURL,
-    headers: config.headers,
-    httpAgent: config.httpAgent,
-    httpsAgent: config.httpsAgent,
-    paramsSerializer: qs.stringify,
-    proxy: config.proxy,
-    timeout: config.timeout,
-    adapter: config.adapter,
-    maxContentLength: config.maxContentLength,
-    logHandler: config.logHandler,
-    // responseLogger: config.responseLogger,
-    // requestLogger: config.requestLogger,
-    retryOnError: config.retryOnError,
-  };
-
-  const instance = axios.create(axiosOptions) as AxiosInstance;
+  const instance = axios.create(axiosConfig) as AxiosInstance;
 
   const TOKEN_PATH = "/api/oauth/v1/token";
 
   const base64EncodedBuffer = Buffer.from(
-    `${config.clientId}:${config.secret}`
+    `${options.clientId}:${options.secret}`
   );
   const base64Encoded = base64EncodedBuffer.toString("base64");
 
   const getAccessToken = async () => {
-    // if no accessToken or accessToken will soon expire (in less than 60 seconds)
     if (!accessToken) {
       const tokenResult = await axios.post(
         `${baseURL}${TOKEN_PATH}`,
         {
           grant_type: "password",
-          username: config.username,
-          password: config.password,
+          username: options.username,
+          password: options.password,
         },
         {
           headers: {
@@ -96,6 +79,14 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     return accessToken;
   };
 
+  instance.interceptors.request.use(function (config) {
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${accessToken}`,
+    };
+    return config;
+  });
+
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
       return response;
@@ -103,6 +94,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     async function (error) {
       const originalRequest = error.config;
       if (
+        error.response &&
         (error.response.status === 403 || error.response.status === 401) &&
         !originalRequest._retry
       ) {
@@ -115,16 +107,6 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
       return Promise.reject(error);
     }
   );
-
-  instance.interceptors.request.use(function (config) {
-    return getAccessToken().then((accessToken) => {
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${accessToken}`,
-      };
-      return config;
-    });
-  });
 
   return instance;
 };

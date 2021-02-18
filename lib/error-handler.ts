@@ -5,7 +5,7 @@ export default function errorHandler(errorResponse: AxiosError): never {
   const { config, response } = errorResponse;
   let errorName;
 
-  // Obscure the Management token
+  // Obscure the Authorization token
   if (config.headers && config.headers["Authorization"]) {
     const token = `...${config.headers["Authorization"].substr(-5)}`;
     config.headers["Authorization"] = `Bearer ${token}`;
