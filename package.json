@@ -9,9 +9,6 @@
     "import": "./dist/mjs/index.js",
     "require": "./dist/cjs/index.js"
   },
-  "engines": {
-    "node": ">=15"
-  },
   "files": [
     "dist/**/*"
   ],
