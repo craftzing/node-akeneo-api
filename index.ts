@@ -64,9 +64,9 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       }
     }
   };
-  const get = async ({ path, id }: { path: string; id?: String }) => {
+  const getOne = async ({ path, code }: { path: string; code?: String }) => {
     try {
-      const { data } = await http.get(`${path}${id ? "/" + id : ""}`);
+      const { data } = await http.get(`${path}${code ? "/" + code : ""}`);
       return data;
     } catch (error) {
       if (error.isAxiosError) {
@@ -77,9 +77,13 @@ export const createClient = (params: ClientParams): AkeneoClient => {
     }
   };
 
-  const getMany = async ({ path }: { path: string }) => {
+  const get = async ({ path, search }: { path: string; search?: string }) => {
     try {
-      const { data } = await http.get(`${path}`);
+      const { data } = await http.get(`${path}`, {
+        params: {
+          search,
+        },
+      });
       return data._embedded.items;
     } catch (error) {
       if (error.isAxiosError) {
@@ -110,7 +114,6 @@ export const createClient = (params: ClientParams): AkeneoClient => {
     path: string;
     page?: number;
   }): Promise<any[]> => {
-    // try {
     const { data } = await http.get(path, {
       params: {
         with_count: true,
@@ -126,13 +129,6 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       ];
     }
     return data._embedded.items;
-    // } catch (error) {
-    //   if (error.isAxiosError) {
-    //     errorHandler(error);
-    //   } else {
-    //     throw error;
-    //   }
-    // }
   };
 
   const getAllBySearchAfter = async ({
@@ -142,17 +138,15 @@ export const createClient = (params: ClientParams): AkeneoClient => {
     path: string;
     searchAfter?: string;
   }): Promise<any[]> => {
-    // try {
     const {
       data,
-    }: { data: { _embedded: { items: any[] }; _links: any } } = await http.get(
-      path,
-      {
-        params: {
-          ...(searchAfter ? { search_after: searchAfter } : {}),
-        },
-      }
-    );
+    }: {
+      data: { _embedded: { items: any[] }; _links: any };
+    } = await http.get(path, {
+      params: {
+        ...(searchAfter ? { search_after: searchAfter } : {}),
+      },
+    });
     const lastItem = last(data._embedded.items);
     console.log(data._links?.next?.href);
     if (data._links?.next?.href) {
@@ -165,13 +159,6 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       ];
     }
     return data._embedded.items;
-    // } catch (error) {
-    //   if (error.isAxiosError) {
-    //     errorHandler(error);
-    //   } else {
-    //     throw error;
-    //   }
-    // }
   };
 
   return {
@@ -179,21 +166,23 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       http,
     },
     category: {
-      get: (id) => wrap(() => get({ path: CATEGORIES_PATH, id })),
+      getOne: (code) => wrap(() => getOne({ path: CATEGORIES_PATH, code })),
       getAll: () => getAllByPage({ path: CATEGORIES_PATH }),
     },
     productModel: {
-      getOne: (id) => get({ path: PRODUCT_MODEL_PATH, id }),
-      get: (query) => getAllByPage({ path: PRODUCT_MODEL_PATH, ...query }),
-      getAll: () => wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH })),
+      getOne: (code) => getOne({ path: PRODUCT_MODEL_PATH, code }),
+      get: (query) => get({ path: PRODUCT_MODEL_PATH, ...query }),
+      getAll: (query) =>
+        wrap(() => getAllByPage({ path: PRODUCT_MODEL_PATH, ...query })),
     },
     product: {
-      getOne: (id) => get({ path: PRODUCT_PATH, id }),
-      get: (query) => getAllByPage({ path: PRODUCT_PATH, ...query }),
-      getAll: () => getAllByPage({ path: PRODUCT_PATH }),
+      getOne: (code) => getOne({ path: PRODUCT_PATH, code }),
+      get: (query) => get({ path: PRODUCT_PATH, ...query }),
+      getAll: (query) => getAllByPage({ path: PRODUCT_PATH, ...query }),
     },
     assetFamily: {
-      get: (code) => get({ path: ASSET_FAMILIES, id: code }),
+      getOne: (code) => getOne({ path: ASSET_FAMILIES, code }),
+      get: () => get({ path: ASSET_FAMILIES }),
       getAll: () => getAllByPage({ path: ASSET_FAMILIES }),
     },
     assets: {
@@ -201,23 +190,27 @@ export const createClient = (params: ClientParams): AkeneoClient => {
         getAllBySearchAfter({
           path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets`,
         }),
-      get: (assetFamilyCode: string, code: string): Promise<Asset[]> =>
-        get({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets/${code}` }),
+      get: async (assetFamilyCode: string): Promise<Asset[]> =>
+        await get({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets` }),
+      getOne: (assetFamilyCode: string, code: string): Promise<Asset[]> =>
+        getOne({ path: `${ASSET_FAMILIES}/${assetFamilyCode}/assets`, code }),
     },
     assetMediaFiles: {
-      get: async (code: string) => {
-        return await getBinary({ path: ASSET_MEDIA_FILES, id: code });
-      },
+      get: async (code: string) =>
+        getBinary({ path: ASSET_MEDIA_FILES, id: code }),
     },
     referenceEntitiesMediaFiles: {
-      get: async (code: string) => {
-        return await getBinary({
+      get: async (code: string) =>
+        getBinary({
           path: REFERENCE_ENTITIES_MEDIA_FILES,
           id: code,
-        });
-      },
+        }),
     },
     attributes: {
+      get: () => get({ path: ATTRIBUTES }),
+      getAll: () => getAllByPage({ path: ATTRIBUTES }),
+      getOptions: (attribute) =>
+        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
       add: async ({ code, attribute }) =>
         await http.patch(`${ATTRIBUTES}/${code}`, attribute),
       addOption: async ({ attributeCode, code, option }) =>
@@ -225,14 +218,11 @@ export const createClient = (params: ClientParams): AkeneoClient => {
           `${ATTRIBUTES}/${attributeCode}/options/${code}`,
           option
         ),
-      getAll: () => getAllByPage({ path: ATTRIBUTES }),
-      getOptions: (attribute) =>
-        getAllByPage({ path: `${ATTRIBUTES}/${attribute}/options` }),
     },
     referenceEntities: {
-      getMany: (): Promise<Entity[]> => getMany({ path: REFERENCE_ENTITIES }),
+      get: (): Promise<Entity[]> => get({ path: REFERENCE_ENTITIES }),
       getRecords: (id: string): Promise<EntityRecord[]> =>
-        getMany({ path: `${REFERENCE_ENTITIES}/${id}/records` }),
+        get({ path: `${REFERENCE_ENTITIES}/${id}/records` }),
       add: async ({ code, body }) =>
         await http.patch(`/api/rest/v1/reference-entities/${code}`, body),
       addAttribute: async ({ referenceEntityCode, code, attribute }) => {
@@ -261,9 +251,9 @@ export const createClient = (params: ClientParams): AkeneoClient => {
       },
     },
     families: {
-      getMany: () => getMany({ path: FAMILIES }),
+      get: () => get({ path: FAMILIES }),
       getVariants: (id: string): Promise<Variant[]> =>
-        getMany({ path: `${FAMILIES}/${id}/variants` }),
+        get({ path: `${FAMILIES}/${id}/variants` }),
     },
   };
 };

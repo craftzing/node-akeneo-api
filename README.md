@@ -7,7 +7,8 @@ More info at https://api.akeneo.com/api-reference-index.html
 ### Features
 
 - Easy typed access to your Akeneo environment
-- Built in token handlinge
+- Built in token handling
+- Helper function to get all products or product models easily
 
 ### Installation
 

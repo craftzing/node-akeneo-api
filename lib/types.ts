@@ -21,7 +21,9 @@ export type ClientParams = {
    * matching secret
    */
   secret: string;
-
+  /**
+   * Optional: axiosOptions (https://github.com/axios/axios#request-config)
+   */
   axiosOptions?: AxiosRequestConfig;
 };
 
@@ -37,36 +39,81 @@ export type AkeneoClient = {
   raw: {
     http: AxiosInstance;
   };
-  category: {
-    get: (id: string) => Promise<Category>;
-    getAll: () => Promise<Category[]>;
+  product: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_products__code_
+     */
+    getOne: (code: string) => Promise<Product>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_products
+     */
+    get: (query: ProductQueryParameters) => Promise<Product[]>;
+    getAll: (query?: ProductQueryParameters) => Promise<Product[]>;
   };
   productModel: {
-    getOne: (id: string) => Promise<ProductModel>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_product_models__code_
+     */
+    getOne: (code: string) => Promise<ProductModel>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_product_models
+     */
     get: (query: ProductModelQueryParameters) => Promise<ProductModel[]>;
-    getAll: () => Promise<ProductModel[]>;
+    getAll: (query?: ProductModelQueryParameters) => Promise<ProductModel[]>;
   };
-  product: {
-    getOne: (id: string) => Promise<Product>;
-    get: (query: ProductQueryParameters) => Promise<Product[]>;
-    getAll: () => Promise<Product[]>;
+  category: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_categories__code_
+     */
+    getOne: (code: string) => Promise<Category>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#Category
+     */
+    getAll: () => Promise<Category[]>;
   };
   assetFamily: {
-    get: (code: string) => Promise<AssetFamily>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_asset_family__code_
+     */
+    getOne: (code: string) => Promise<AssetFamily>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#Assetfamily
+     */
+    get: () => Promise<AssetFamily[]>;
     getAll: () => Promise<AssetFamily[]>;
   };
   assets: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_assets__code_
+     */
+    getOne: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_assets
+     */
+    get: (assetFamilyCode: string) => Promise<Asset[]>;
     getAll: (assetFamilyCode: string) => Promise<Asset[]>;
-    get: (assetFamilyCode: string, code: string) => Promise<Asset[]>;
   };
   assetMediaFiles: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_asset_media_files__code
+     */
     get: (code: string) => Promise<any>;
   };
   referenceEntitiesMediaFiles: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_reference_entity_media_files__code
+     */
     get: (code: string) => Promise<any>;
   };
   attributes: {
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_attributes
+     */
+    get: () => Promise<Attribute[]>;
     getAll: () => Promise<Attribute[]>;
+    /**
+     * @see https://api.akeneo.com/api-reference.html#get_attributes__attribute_code__options
+     */
     getOptions: (attribute: string) => Promise<AttributeOption[]>;
     add: ({
       code,
@@ -86,7 +133,7 @@ export type AkeneoClient = {
     }) => Promise<AxiosResponse<any>>;
   };
   referenceEntities: {
-    getMany: () => Promise<Entity[]>;
+    get: () => Promise<Entity[]>;
     getRecords: (id: string) => Promise<EntityRecord[]>;
     add: ({
       code,
@@ -124,7 +171,7 @@ export type AkeneoClient = {
     }) => Promise<void>;
   };
   families: {
-    getMany: () => Promise<Family[]>;
+    get: () => Promise<Family[]>;
     getVariants: (id: string) => Promise<Variant[]>;
   };
 };
