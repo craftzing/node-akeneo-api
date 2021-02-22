@@ -5,15 +5,12 @@
   "author": "Jens Verbeken",
   "license": "MIT",
   "types": "dist/cjs/index.d.ts",
-  "exports": {
-    "import": "./dist/mjs/index.js",
-    "require": "./dist/cjs/index.js"
-  },
+  "main": "dist/cjs/index.js",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
+    "build": "rm -fr dist/* && tsc -p tsconfig-cjs.json ",
     "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "build:docs": "typedoc",
     "prepare": "yarn run build"
