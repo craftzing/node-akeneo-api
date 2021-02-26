@@ -22,7 +22,7 @@ export default {
       .then((response) => {
         const { data } = response;
         return {
-          current_page: data.current_page,
+          ...(data.current_page ? { current_page: data.current_page } : {}),
           ...(data.items_count ? { items_count: data.items_count } : {}),
           items: data._embedded.items,
           _links: data._links,

@@ -4,7 +4,6 @@
  */
 
 /* eslint-disable no-underscore-dangle */
-import { last } from "ramda";
 import errorHandler from "./lib/error-handler";
 import createHttpClient from "./lib/http-client";
 import {
@@ -20,6 +19,8 @@ import {
   Entity,
   Product,
 } from "./lib/types";
+
+import raw from "./lib/endpoints/raw";
 
 import * as endpoints from "./lib/endpoints";
 import { AxiosInstance } from "axios";
@@ -58,55 +59,6 @@ const wrap = <P extends {}, R>(
 export const createClient = (params: ClientParams) => {
   const http = createHttpClient(params);
 
-  const getBinary = async ({ path, id }: { path: string; id?: String }) => {
-    try {
-      const data = await http.get(`${path}${id ? "/" + id : ""}`, {
-        responseType: "arraybuffer",
-      });
-      return data;
-    } catch (error) {
-      if (error.isAxiosError) {
-        errorHandler(error);
-      } else {
-        throw error;
-      }
-    }
-  };
-
-  const getAllBySearchAfter = async ({
-    path,
-    searchAfter,
-  }: {
-    path: string;
-    searchAfter?: string;
-  }): Promise<{ items: any[] }> => {
-    const {
-      data,
-    }: {
-      data: { _embedded: { items: any[] }; _links: any };
-    } = await http.get(path, {
-      params: {
-        ...(searchAfter ? { search_after: searchAfter } : {}),
-      },
-    });
-    const lastItem = last(data._embedded.items);
-    console.log(data._links?.next?.href);
-    if (data._links?.next?.href) {
-      return {
-        items: [
-          ...data._embedded.items,
-          ...(
-            await getAllBySearchAfter({
-              path,
-              searchAfter: lastItem.code,
-            })
-          ).items,
-        ],
-      };
-    }
-    return { items: data._embedded.items };
-  };
-
   return {
     raw: {
       http,
@@ -130,24 +82,30 @@ export const createClient = (params: ClientParams) => {
       getOne: wrap(http, endpoints.assetFamily.getOne),
       get: wrap(http, endpoints.assetFamily.get),
       getAll: wrap(http, endpoints.assetFamily.getAll),
+      getAssets: wrap(http, endpoints.assetFamily.getAssets),
+      getAsset: wrap(http, endpoints.assetFamily.getAsset),
+      getAssetsAll: wrap(http, endpoints.assetFamily.getAssetsAll),
     },
-    asset: {
-      getOne: wrap(http, endpoints.asset.getOne),
-      get: wrap(http, endpoints.asset.get),
-      getAll: wrap(http, endpoints.asset.getAll),
-    },
-    assetMediaFiles: {
+    assetMediaFile: {
+      /**
+       *
+       * @see https://api.akeneo.com/api-reference.html#get_asset_media_files__code
+       */
+
       get: async (code: string) =>
-        getBinary({ path: ASSET_MEDIA_FILES, id: code }),
+        raw.getOne(http, `${ASSET_MEDIA_FILES}/${code}`, {
+          responseType: "arraybuffer",
+          params: {},
+        }),
     },
     referenceEntitiesMediaFiles: {
       /**
        * @see https://api.akeneo.com/api-reference.html#get_reference_entity_media_files__code
        */
       get: async (code: string): Promise<any> =>
-        getBinary({
-          path: REFERENCE_ENTITIES_MEDIA_FILES,
-          id: code,
+        raw.getOne(http, `${REFERENCE_ENTITIES_MEDIA_FILES}/${code}`, {
+          responseType: "arraybuffer",
+          params: {},
         }),
     },
     attribute: {
@@ -171,7 +129,7 @@ export const createClient = (params: ClientParams) => {
           option
         ),
     },
-    referenceEntities: {
+    referenceEntity: {
       get: wrap(http, endpoints.referenceEntity.get),
       getRecords: wrap(http, endpoints.referenceEntity.getRecords),
       /**

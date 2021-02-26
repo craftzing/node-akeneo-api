@@ -33,7 +33,7 @@ export const getRecords = (
 ): Promise<ListResponse & { items: EntityRecord[] }> => {
   return raw.get(
     http,
-    `/api/rest/v1/reference-entities/${params.referenceEntityCode}`,
+    `/api/rest/v1/reference-entities/${params.referenceEntityCode}/records`,
     {
       params: {
         ...params.query,
