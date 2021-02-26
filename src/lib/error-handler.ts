@@ -28,9 +28,6 @@ export default function errorHandler(errorResponse: AxiosError): never {
   };
 
   if (data) {
-    if ("requestId" in data) {
-      errorData.requestId = data.requestId || "UNKNOWN";
-    }
     if ("message" in data) {
       errorData.message = data.message || "";
     }

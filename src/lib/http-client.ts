@@ -1,6 +1,5 @@
 import qs from "qs";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { isNode, getNodeVersion } from "./utils";
 import { ClientParams } from "./types";
 
 /**
@@ -34,20 +33,13 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     maxContentLength: 1073741824, // 1GB
   };
 
-  const { baseURL } = options;
+  const { url: baseURL } = options;
   const axiosConfig = {
     ...defaultConfig,
     ...(options.axiosOptions || {}),
     baseURL,
     paramsSerializer: qs.stringify,
   };
-
-  // Set these headers only for node because browsers don't like it when you
-  // override user-agent or accept-encoding.
-  if (isNode()) {
-    axiosConfig.headers["user-agent"] = `node.js/${getNodeVersion()}`;
-    axiosConfig.headers["Accept-Encoding"] = "gzip";
-  }
 
   const instance = axios.create(axiosConfig) as AxiosInstance;
 
