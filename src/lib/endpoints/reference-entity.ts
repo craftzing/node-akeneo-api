@@ -1,19 +1,19 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 import {
   ListResponse,
   Entity,
   EntityRecord,
   ReferenceEntityQueryParameters,
   ReferenceEntityRecordQueryParameters,
-} from "../types";
-import raw from "./raw";
+} from '../types';
+import raw from './raw';
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_reference_entities
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: ReferenceEntityQueryParameters }
+  params: { query?: ReferenceEntityQueryParameters },
 ): Promise<ListResponse & { items: Entity[] }> => {
   return raw.get(http, `/api/rest/v1/reference-entities`, {
     params: {
@@ -29,7 +29,7 @@ export const getRecords = (
   params: {
     referenceEntityCode: string;
     query?: ReferenceEntityRecordQueryParameters;
-  }
+  },
 ): Promise<ListResponse & { items: EntityRecord[] }> => {
   return raw.get(
     http,
@@ -38,6 +38,6 @@ export const getRecords = (
       params: {
         ...params.query,
       },
-    }
+    },
   );
 };

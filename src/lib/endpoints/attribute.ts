@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
 import {
   ListResponse,
@@ -6,15 +6,15 @@ import {
   AttributeOption,
   AttributeQueryParameters,
   AttributeOptionQueryParameters,
-} from "../types";
-import raw from "./raw";
+} from '../types';
+import raw from './raw';
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_attributes
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: AttributeQueryParameters }
+  params: { query?: AttributeQueryParameters },
 ): Promise<ListResponse & { items: Attribute[] }> => {
   return raw.get(http, `/api/rest/v1/attributes`, {
     params: {
@@ -30,14 +30,14 @@ export const getOne = (
   http: AxiosInstance,
   params: {
     code: string;
-  }
+  },
 ): Promise<Attribute> => {
   return raw.getOne(http, `/api/rest/v1/attributes/${params.code}`, {});
 };
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: AttributeQueryParameters }
+  params: { query?: AttributeQueryParameters },
 ): Promise<ListResponse & { items: Attribute[] }> => {
   return raw.getAll(http, `/api/rest/v1/attributes`, {
     params: {
@@ -51,7 +51,7 @@ export const getAll = (
  */
 export const getOptions = (
   http: AxiosInstance,
-  params: { attributeCode: string; query?: AttributeOptionQueryParameters }
+  params: { attributeCode: string; query?: AttributeOptionQueryParameters },
 ): Promise<ListResponse & { items: AttributeOption[] }> => {
   return raw.get(
     http,
@@ -60,6 +60,6 @@ export const getOptions = (
       params: {
         ...params.query,
       },
-    }
+    },
   );
 };

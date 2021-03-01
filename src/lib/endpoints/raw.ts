@@ -1,13 +1,13 @@
-import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { last } from "ramda";
-import errorHandler from "../error-handler";
-import { ListResponse } from "../types";
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { last } from 'ramda';
+import errorHandler from '../error-handler';
+import { ListResponse } from '../types';
 
 export default {
   get: function get(
     http: AxiosInstance,
     url: string,
-    config: AxiosRequestConfig = { params: {} }
+    config: AxiosRequestConfig = { params: {} },
   ): Promise<
     ListResponse & {
       items: any[];
@@ -31,7 +31,7 @@ export default {
   getOne: function getOne(
     http: AxiosInstance,
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ) {
     return http
       .get(url, {
@@ -45,7 +45,7 @@ export default {
   getAll: async function getAll(
     http: AxiosInstance,
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<ListResponse & { items: any[] }> {
     const params = config?.params;
     const page = params?.page || 1;
@@ -80,10 +80,10 @@ export default {
   getAllBySearchAfter: async function getAll(
     http: AxiosInstance,
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<ListResponse & { items: any[] }> {
     const params = config?.params;
-    const search_after = params?.search_after || "";
+    const search_after = params?.search_after || '';
     const { items, _links } = await this.get(http, url, {
       params: {
         ...(search_after ? { search_after } : {}),

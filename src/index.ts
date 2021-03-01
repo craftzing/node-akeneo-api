@@ -4,8 +4,7 @@
  */
 
 /* eslint-disable no-underscore-dangle */
-import errorHandler from "./lib/error-handler";
-import createHttpClient from "./lib/http-client";
+import createHttpClient from './lib/http-client';
 import {
   ClientParams,
   ProductModel,
@@ -18,28 +17,28 @@ import {
   Asset,
   Entity,
   Product,
-} from "./lib/types";
+} from './lib/types';
 
-import raw from "./lib/endpoints/raw";
+import raw from './lib/endpoints/raw';
 
-import * as endpoints from "./lib/endpoints";
-import { AxiosInstance } from "axios";
+import * as endpoints from './lib/endpoints';
+import { AxiosInstance } from 'axios';
 
-const ATTRIBUTES_PATH = "/api/rest/v1/attributes";
-const ASSET_MEDIA_FILES = "/api/rest/v1/asset-media-files";
+const ATTRIBUTES_PATH = '/api/rest/v1/attributes';
+const ASSET_MEDIA_FILES = '/api/rest/v1/asset-media-files';
 const REFERENCE_ENTITIES_MEDIA_FILES =
-  "/api/rest/v1/reference-entities-media-files";
+  '/api/rest/v1/reference-entities-media-files';
 
 export type AkeneoClientAPI = ReturnType<typeof createClient>;
 
-type EndpointDefinition<P extends {}, R> = (
+type EndpointDefinition<P extends Record<string, any>, R> = (
   http: AxiosInstance,
-  params: P
+  params: P,
 ) => R;
 
-const wrap = <P extends {}, R>(
+const wrap = <P extends Record<string, any>, R>(
   http: AxiosInstance,
-  fn: EndpointDefinition<P, R>
+  fn: EndpointDefinition<P, R>,
 ) => (params: P) => fn(http, params);
 
 /**
@@ -94,7 +93,7 @@ export const createClient = (params: ClientParams) => {
 
       get: async (code: string) =>
         raw.getOne(http, `${ASSET_MEDIA_FILES}/${code}`, {
-          responseType: "arraybuffer",
+          responseType: 'arraybuffer',
           params: {},
         }),
     },
@@ -104,7 +103,7 @@ export const createClient = (params: ClientParams) => {
        */
       get: async (code: string): Promise<any> =>
         raw.getOne(http, `${REFERENCE_ENTITIES_MEDIA_FILES}/${code}`, {
-          responseType: "arraybuffer",
+          responseType: 'arraybuffer',
           params: {},
         }),
     },
@@ -126,7 +125,7 @@ export const createClient = (params: ClientParams) => {
       }) =>
         await http.patch(
           `${ATTRIBUTES_PATH}/${attributeCode}/options/${code}`,
-          option
+          option,
         ),
     },
     referenceEntity: {
@@ -148,9 +147,9 @@ export const createClient = (params: ClientParams) => {
         code: string;
         attribute: any;
       }) => {
-        const { data } = await http.patch(
+        await http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/attributes/${code}`,
-          attribute
+          attribute,
         );
       },
       /**
@@ -169,7 +168,7 @@ export const createClient = (params: ClientParams) => {
       }) =>
         http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/attributes/${attributeCode}/options/${code}`,
-          option
+          option,
         ),
       /**
        * @see https://api.akeneo.com/api-reference.html#patch_reference_entity_records
@@ -183,7 +182,7 @@ export const createClient = (params: ClientParams) => {
       }) =>
         http.patch(
           `/api/rest/v1/reference-entities/${referenceEntityCode}/records`,
-          records
+          records,
         ),
     },
     family: {

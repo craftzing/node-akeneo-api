@@ -1,13 +1,13 @@
-import { AxiosInstance } from "axios";
-import { ListResponse, Category, CategoryQueryParameters } from "../types";
-import raw from "./raw";
+import { AxiosInstance } from 'axios';
+import { ListResponse, Category, CategoryQueryParameters } from '../types';
+import raw from './raw';
 
 /**
  * @see https://api.akeneo.com/api-reference.html#Category
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: CategoryQueryParameters }
+  params: { query?: CategoryQueryParameters },
 ): Promise<ListResponse & { items: Category[] }> => {
   return raw.get(http, `/api/rest/v1/categories`, {
     params,
@@ -25,7 +25,7 @@ export const getOne = (
       with_attribute_options?: boolean;
       with_quality_scores?: boolean;
     };
-  }
+  },
 ): Promise<Category> => {
   return raw.getOne(http, `/api/rest/v1/categories/${params.code}`, {
     params,
@@ -34,7 +34,7 @@ export const getOne = (
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: CategoryQueryParameters }
+  params: { query?: CategoryQueryParameters },
 ): Promise<ListResponse & { items: Category[] }> => {
   return raw.getAll(http, `/api/rest/v1/categories`, {
     params,

@@ -1,6 +1,6 @@
-import qs from "qs";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { ClientParams } from "./types";
+import qs from 'qs';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { ClientParams } from './types';
 
 /**
  * Create pre configured axios instance
@@ -9,14 +9,14 @@ import { ClientParams } from "./types";
  * @return {AxiosInstance} Initialized axios instance
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
-  let accessToken: string = "invalid";
+  let accessToken = 'invalid';
 
   const defaultConfig = {
     insecure: false,
     retryOnError: true,
     logHandler: (level: string, data: any): void => {
-      if (level === "error" && data) {
-        const title = [data.name, data.message].filter((a) => a).join(" - ");
+      if (level === 'error' && data) {
+        const title = [data.name, data.message].filter((a) => a).join(' - ');
         console.error(`[error] ${title}`);
         console.error(data);
         return;
@@ -28,7 +28,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     httpsAgent: false,
     timeout: 30000,
     proxy: false as const,
-    basePath: "",
+    basePath: '',
     adapter: undefined,
     maxContentLength: 1073741824, // 1GB
   };
@@ -43,19 +43,19 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
 
   const instance = axios.create(axiosConfig) as AxiosInstance;
 
-  const TOKEN_PATH = "/api/oauth/v1/token";
+  const TOKEN_PATH = '/api/oauth/v1/token';
 
   const base64EncodedBuffer = Buffer.from(
-    `${options.clientId}:${options.secret}`
+    `${options.clientId}:${options.secret}`,
   );
-  const base64Encoded = base64EncodedBuffer.toString("base64");
+  const base64Encoded = base64EncodedBuffer.toString('base64');
 
   const getAccessToken = async () => {
     if (!accessToken) {
       const tokenResult = await axios.post(
         `${baseURL}${TOKEN_PATH}`,
         {
-          grant_type: "password",
+          grant_type: 'password',
           username: options.username,
           password: options.password,
         },
@@ -63,7 +63,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
           headers: {
             Authorization: `Basic ${base64Encoded}`,
           },
-        }
+        },
       );
 
       accessToken = tokenResult.data.access_token;
@@ -91,13 +91,13 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
         !originalRequest._retry
       ) {
         originalRequest._retry = true;
-        accessToken = "";
+        accessToken = '';
         originalRequest.headers.Authorization =
-          "Bearer " + (await getAccessToken());
+          'Bearer ' + (await getAccessToken());
         return instance(originalRequest);
       }
       return Promise.reject(error);
-    }
+    },
   );
 
   return instance;

@@ -1,17 +1,17 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 import {
   ListResponse,
   ProductModel,
   ProductModelQueryParameters,
-} from "../types";
-import raw from "./raw";
+} from '../types';
+import raw from './raw';
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_product_models
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: ProductModelQueryParameters }
+  params: { query?: ProductModelQueryParameters },
 ): Promise<ListResponse & { items: ProductModel[] }> => {
   return raw.get(http, `/api/rest/v1/product-models`, {
     params: {
@@ -27,14 +27,14 @@ export const getOne = (
   http: AxiosInstance,
   params: {
     code: string;
-  }
+  },
 ): Promise<ProductModel> => {
   return raw.getOne(http, `/api/rest/v1/product-models/${params.code}`, {});
 };
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: ProductModelQueryParameters }
+  params: { query?: ProductModelQueryParameters },
 ): Promise<ListResponse & { items: ProductModel[] }> => {
   return raw.getAll(http, `/api/rest/v1/product-models`, {
     params: {

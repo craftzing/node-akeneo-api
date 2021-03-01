@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosRequestConfig } from 'axios';
 
 export type ClientParams = {
   /**
@@ -127,7 +127,7 @@ export type ProductModel = {
   updated: string;
   associations: Record<string, Assocation>;
   quantified_assoications: Record<string, Assocation>;
-  metadata: Object;
+  metadata: Record<string, any>;
 };
 
 export type Product = {
@@ -142,7 +142,7 @@ export type Product = {
   created: string;
   updated: string;
   quantified_assoications: Record<string, Assocation>;
-  metadata: Object;
+  metadata: Record<string, any>;
 };
 
 export type Family = {
@@ -150,8 +150,8 @@ export type Family = {
   attribute_as_label: string;
   attribute_as_image: string;
   attributes: string[];
-  attribute_requirements: Object;
-  labels: Object;
+  attribute_requirements: Record<string, any>;
+  labels: Record<string, any>;
 };
 
 type VariantAttributeSet = {
@@ -162,7 +162,7 @@ type VariantAttributeSet = {
 export type Variant = {
   code: string;
   variant_attribute_sets: VariantAttributeSet[];
-  labels: Object;
+  labels: Record<string, any>;
 };
 
 export type Attribute = {
