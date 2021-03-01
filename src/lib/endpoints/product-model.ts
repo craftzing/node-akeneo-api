@@ -26,14 +26,10 @@ export const get = (
 export const getOne = (
   http: AxiosInstance,
   params: {
-    identifier: string;
+    code: string;
   }
 ): Promise<ProductModel> => {
-  return raw.getOne(
-    http,
-    `/api/rest/v1/product-models/${params.identifier}`,
-    {}
-  );
+  return raw.getOne(http, `/api/rest/v1/product-models/${params.code}`, {});
 };
 
 export const getAll = (
