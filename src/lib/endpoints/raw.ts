@@ -7,14 +7,13 @@ export default {
   get: function get(
     http: AxiosInstance,
     url: string,
-    config?: AxiosRequestConfig
+    config: AxiosRequestConfig = { params: {} }
   ): Promise<
     ListResponse & {
       items: any[];
       _links: any;
     }
   > {
-    console.log("config,", config);
     return http
       .get(url, {
         ...config,
@@ -49,10 +48,10 @@ export default {
     config?: AxiosRequestConfig
   ): Promise<ListResponse & { items: any[] }> {
     const params = config?.params;
-    const query = params.query;
-    const page = query?.page || 1;
+    const page = params?.page || 1;
     const { items_count = 0, items } = await this.get(http, url, {
       params: {
+        ...params,
         with_count: true,
         limit: 100,
         page,
@@ -66,7 +65,9 @@ export default {
           ...(
             await this.getAll(http, url, {
               params: {
-                query: { ...query, limit: query?.limit || 100, page: page + 1 },
+                ...params,
+                limit: params?.limit || 100,
+                page: page + 1,
               },
             })
           ).items,
@@ -82,11 +83,10 @@ export default {
     config?: AxiosRequestConfig
   ): Promise<ListResponse & { items: any[] }> {
     const params = config?.params;
-    const query = params.query;
-    const searchAfter = query?.search_after || 1;
+    const search_after = params?.search_after || "";
     const { items, _links } = await this.get(http, url, {
       params: {
-        ...(searchAfter ? { search_after: searchAfter } : {}),
+        ...(search_after ? { search_after } : {}),
         limit: 100,
       },
     });
@@ -99,11 +99,9 @@ export default {
           ...(
             await this.getAllBySearchAfter(http, url, {
               params: {
-                query: {
-                  ...query,
-                  limit: query?.limit || 100,
-                  searchAfter: lastItem.code,
-                },
+                ...params,
+                limit: params?.limit || 100,
+                search_after: lastItem.code,
               },
             })
           ).items,
