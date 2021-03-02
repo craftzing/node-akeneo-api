@@ -1,5 +1,5 @@
 import { path } from 'ramda';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosAdapter } from 'axios';
 
 export default function errorHandler(errorResponse: AxiosError): never {
   const { config, response } = errorResponse;
