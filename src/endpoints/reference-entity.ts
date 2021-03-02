@@ -13,12 +13,10 @@ import raw from './raw';
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: ReferenceEntityQueryParameters },
+  { query }: { query?: ReferenceEntityQueryParameters },
 ): Promise<ListResponse & { items: Entity[] }> => {
   return raw.get(http, `/api/rest/v1/reference-entities`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
 /**
@@ -26,18 +24,19 @@ export const get = (
  */
 export const getRecords = (
   http: AxiosInstance,
-  params: {
+  {
+    referenceEntityCode,
+    query,
+  }: {
     referenceEntityCode: string;
     query?: ReferenceEntityRecordQueryParameters;
   },
 ): Promise<ListResponse & { items: EntityRecord[] }> => {
   return raw.get(
     http,
-    `/api/rest/v1/reference-entities/${params.referenceEntityCode}/records`,
+    `/api/rest/v1/reference-entities/${referenceEntityCode}/records`,
     {
-      params: {
-        ...params.query,
-      },
+      params: query,
     },
   );
 };

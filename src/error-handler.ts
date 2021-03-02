@@ -27,6 +27,15 @@ export default function errorHandler(errorResponse: AxiosError): never {
     details: {},
   };
 
+  if (config) {
+    errorData.request = {
+      url: config.url,
+      headers: config.headers,
+      method: config.method,
+      payloadData: config.data,
+    };
+  }
+
   if (data) {
     if ('message' in data) {
       errorData.message = data.message || '';

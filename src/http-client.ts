@@ -1,5 +1,5 @@
 import qs from 'qs';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ClientParams } from './types';
 
 /**
@@ -9,20 +9,11 @@ import { ClientParams } from './types';
  * @return {AxiosInstance} Initialized axios instance
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
-  let accessToken = 'invalid';
+  let accessToken = '';
 
   const defaultConfig = {
     insecure: false,
     retryOnError: true,
-    logHandler: (level: string, data: any): void => {
-      if (level === 'error' && data) {
-        const title = [data.name, data.message].filter((a) => a).join(' - ');
-        console.error(`[error] ${title}`);
-        console.error(data);
-        return;
-      }
-      console.log(`[${level}] ${data}`);
-    },
     headers: {} as Record<string, unknown>,
     httpAgent: false,
     httpsAgent: false,
@@ -34,7 +25,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
   };
 
   const { url: baseURL } = options;
-  const axiosConfig = {
+  const axiosConfig: AxiosRequestConfig = {
     ...defaultConfig,
     ...(options.axiosOptions || {}),
     baseURL,
@@ -71,10 +62,12 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     return accessToken;
   };
 
-  instance.interceptors.request.use(function (config) {
+  instance.interceptors.request.use(async function (config) {
     config.headers = {
       ...config.headers,
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${
+        accessToken ? accessToken : await getAccessToken()
+      }`,
     };
     return config;
   });

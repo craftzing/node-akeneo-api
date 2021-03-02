@@ -7,7 +7,7 @@ export default {
   get: function get(
     http: AxiosInstance,
     url: string,
-    config: AxiosRequestConfig = { params: {} },
+    config: AxiosRequestConfig,
   ): Promise<
     ListResponse & {
       items: any[];

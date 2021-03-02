@@ -91,6 +91,7 @@ describe('Category', () => {
             statusText: 'Bad request',
             message: 'Search query parameter should be valid JSON.',
             details: {},
+            request: {},
           },
           null,
           '  ',
