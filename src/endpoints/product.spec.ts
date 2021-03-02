@@ -53,7 +53,7 @@ describe('Product', () => {
   });
 
   test('Get with invalid parameters', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
+    axiosGetSpy.mockImplementation(async () => {
       throw createError(
         'Request failed with status code 400',
         { params: { search: 'test' } },

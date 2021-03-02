@@ -4,17 +4,17 @@ import mockResponse from '../../mocks/reference-entity';
 
 import { get, getRecords } from './reference-entity';
 
+const axiosGetSpy = jest.spyOn(axios, 'get');
+
 afterEach(() => {
   jest.clearAllMocks();
 });
 
 describe('Reference Entity', () => {
   test('get', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/reference-entities', {});
@@ -22,11 +22,9 @@ describe('Reference Entity', () => {
   });
 
   test('getRecords', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     const { items } = await getRecords(axios, {
       referenceEntityCode: 'testcode',

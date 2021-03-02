@@ -4,16 +4,16 @@ import mockFamilyResponse from '../../mocks/family';
 
 import { get, getVariants } from './family';
 
+const axiosGetSpy = jest.spyOn(axios, 'get');
+
 afterEach(() => {
   jest.clearAllMocks();
 });
 describe('Family', () => {
   test('get families', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockFamilyResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockFamilyResponse.get }),
+    );
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/families', {
@@ -23,12 +23,9 @@ describe('Family', () => {
   });
 
   test('get variants', async () => {
-    jest.spyOn(axios, 'create').mockImplementation(() => axios);
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockFamilyResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockFamilyResponse.get }),
+    );
 
     const { items } = await getVariants(axios, { familyCode: 'cushions' });
     expect(axios.get).toBeCalledWith(
