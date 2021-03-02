@@ -1,15 +1,15 @@
 import { path } from 'ramda';
 import { AxiosError } from 'axios';
 
-export default function errorHandler(errorResponse: AxiosError): never {
-  const { config, response } = errorResponse;
+const cleanHeaders = (headers: Record<string, any>) =>
+  headers && headers.Authorization
+    ? {
+        ...headers,
+        Authorization: `Bearer ${`...${headers.Authorization.substr(-5)}`}`,
+      }
+    : headers;
 
-  // Obscure the Authorization token
-  if (config && config.headers && config.headers.Authorization) {
-    const token = `...${config.headers.Authorization.substr(-5)}`;
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
+export default function errorHandler({ config, response }: AxiosError): never {
   const data = response?.data;
 
   const errorData: {
@@ -27,7 +27,7 @@ export default function errorHandler(errorResponse: AxiosError): never {
     request: config
       ? {
           url: config.url,
-          headers: config.headers,
+          headers: cleanHeaders(config.headers), // Obscure the Authorization token
           method: config.method,
           payloadData: config.data,
         }
