@@ -21,13 +21,19 @@ describe('errorHandler', () => {
       toJSON: (): any => ({}),
     };
 
-    try {
-      errorHandler(errorMock);
-    } catch (error) {
-      const parsedMessage = JSON.parse(error.message);
-      expect(parsedMessage.message).toBe(
-        'Search query parameter should be valid JSON.',
-      );
-    }
+    expect(() => errorHandler(errorMock)).toThrow(
+      new Error(
+        JSON.stringify(
+          {
+            status: 400,
+            statusText: 'Bad request',
+            message: 'Search query parameter should be valid JSON.',
+            details: {},
+          },
+          null,
+          '  ',
+        ),
+      ),
+    );
   });
 });

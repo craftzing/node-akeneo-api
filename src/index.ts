@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-underscore-dangle */
-import createHttpClient from './lib/http-client';
+import createHttpClient from './http-client';
 import {
   ClientParams,
   ProductModel,
@@ -17,11 +17,11 @@ import {
   Asset,
   Entity,
   Product,
-} from './lib/types';
+} from './types';
 
-import raw from './lib/endpoints/raw';
+import raw from './endpoints/raw';
 
-import * as endpoints from './lib/endpoints';
+import * as endpoints from './endpoints';
 import { AxiosInstance } from 'axios';
 
 const ATTRIBUTES_PATH = '/api/rest/v1/attributes';

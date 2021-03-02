@@ -3,7 +3,7 @@ import axios from 'axios';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
-import mockResponse from '../../../mocks/attribute';
+import mockResponse from '../../mocks/attribute';
 
 import { getOne, get, getAll, getOptions } from './attribute';
 
@@ -36,9 +36,27 @@ describe('Attribute', () => {
     expect(attribute).toHaveProperty('group');
   });
 
-  test('Get with invalid parameters', async () => {
-    jest.spyOn(axios, 'create').mockImplementation(() => axios);
+  test('Get with valid parameters', async () => {
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.get }),
+      );
 
+    await get(axios, {
+      query: {
+        search: '{"code":[{"operator":"IN","value":["code1","code2"]}]}',
+      },
+    });
+
+    expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
+      params: {
+        search: '{"code":[{"operator":"IN","value":["code1","code2"]}]}',
+      },
+    });
+  });
+
+  test('Get with invalid parameters', async () => {
     jest.spyOn(axios, 'get').mockImplementation(async () => {
       throw createError(
         'Request failed with status code 400',
@@ -58,17 +76,22 @@ describe('Attribute', () => {
       );
     });
 
-    try {
-      await get(axios, { query: { search: 'test' } });
-    } catch (error) {
-      expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
-        params: { search: 'test' },
-      });
-      const parsedMessage = JSON.parse(error.message);
-      expect(parsedMessage.message).toBe(
-        'Search query parameter should be valid JSON.',
-      );
-    }
+    await expect(() =>
+      get(axios, { query: { search: 'test' } }),
+    ).rejects.toThrow(
+      new Error(
+        JSON.stringify(
+          {
+            status: 400,
+            statusText: 'Bad request',
+            message: 'Search query parameter should be valid JSON.',
+            details: {},
+          },
+          null,
+          '  ',
+        ),
+      ),
+    );
   });
 
   test('getAll', async () => {

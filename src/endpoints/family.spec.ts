@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import mockFamilyResponse from '../../../mocks/family';
+import mockFamilyResponse from '../../mocks/family';
 
 import { get, getVariants } from './family';
 

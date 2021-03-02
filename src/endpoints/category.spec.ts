@@ -3,7 +3,7 @@ import axios from 'axios';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
-import mockCategoryResponse from '../../../mocks/category';
+import mockCategoryResponse from '../../mocks/category';
 
 import { getOne, get, getAll } from './category';
 
@@ -39,6 +39,26 @@ describe('Category', () => {
     expect(category).toHaveProperty('labels');
   });
 
+  test('Get with valid parameters', async () => {
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockCategoryResponse.get }),
+      );
+
+    await get(axios, {
+      query: {
+        search: '{"code":[{"operator":"IN","value":["code1","code2"]}]}',
+      },
+    });
+
+    expect(axios.get).toBeCalledWith('/api/rest/v1/categories', {
+      params: {
+        search: '{"code":[{"operator":"IN","value":["code1","code2"]}]}',
+      },
+    });
+  });
+
   test('Get with invalid parameters', async () => {
     jest.spyOn(axios, 'create').mockImplementation(() => axios);
 
@@ -61,17 +81,22 @@ describe('Category', () => {
       );
     });
 
-    try {
-      await get(axios, { query: { search: 'test' } });
-    } catch (error) {
-      expect(axios.get).toBeCalledWith('/api/rest/v1/categories', {
-        params: { search: 'test' },
-      });
-      const parsedMessage = JSON.parse(error.message);
-      expect(parsedMessage.message).toBe(
-        'Search query parameter should be valid JSON.',
-      );
-    }
+    await expect(() =>
+      get(axios, { query: { search: 'test' } }),
+    ).rejects.toThrow(
+      new Error(
+        JSON.stringify(
+          {
+            status: 400,
+            statusText: 'Bad request',
+            message: 'Search query parameter should be valid JSON.',
+            details: {},
+          },
+          null,
+          '  ',
+        ),
+      ),
+    );
   });
 
   test('getAll', async () => {
