@@ -18,7 +18,7 @@
     "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "build:docs": "typedoc --tsconfig tsconfig-base.json",
     "prepare": "husky install",
-    "lint": "eslint src",
+    "lint": "eslint src --max-warnings 0",
     "test": "jest"
   },
   "dependencies": {
