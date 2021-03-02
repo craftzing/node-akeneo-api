@@ -23,8 +23,8 @@ export default function errorHandler(errorResponse: AxiosError): never {
   } = {
     status: response?.status,
     statusText: response?.statusText,
-    message: '',
-    details: {},
+    message: data && 'message' in data ? data.message : '',
+    details: data && 'details' in data ? data.details : '',
   };
 
   if (config) {
@@ -34,15 +34,6 @@ export default function errorHandler(errorResponse: AxiosError): never {
       method: config.method,
       payloadData: config.data,
     };
-  }
-
-  if (data) {
-    if ('message' in data) {
-      errorData.message = data.message || '';
-    }
-    if ('details' in data) {
-      errorData.details = data.details || {};
-    }
   }
 
   const error = new Error();
