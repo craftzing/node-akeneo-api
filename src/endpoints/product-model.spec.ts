@@ -4,19 +4,18 @@ import axios from 'axios';
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
 import mockResponse from '../../mocks/product-model';
-
 import { getOne, get, getAll } from './product-model';
+
+const axiosGetSpy = jest.spyOn(axios, 'get');
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 describe('Product Model', () => {
   test('get product models', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {});
@@ -24,11 +23,9 @@ describe('Product Model', () => {
   });
 
   test('getOne', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getOne }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getOne }),
+    );
 
     const category = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models/test', {});
@@ -36,11 +33,9 @@ describe('Product Model', () => {
   });
 
   test('Get with valid parameters', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     await get(axios, {
       query: {
@@ -56,7 +51,7 @@ describe('Product Model', () => {
   });
 
   test('Get with invalid parameters', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
+    axiosGetSpy.mockImplementation(async () => {
       throw createError(
         'Request failed with status code 400',
         { params: { search: 'test' } },
@@ -95,11 +90,9 @@ describe('Product Model', () => {
   });
 
   test('getAll', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getAll }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getAll }),
+    );
 
     const { items: products } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {
