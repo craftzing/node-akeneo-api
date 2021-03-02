@@ -10,7 +10,7 @@ import { getOne, get, getAll } from './product-model';
 afterEach(() => {
   jest.clearAllMocks();
 });
-describe('Product', () => {
+describe('Product Model', () => {
   test('get', async () => {
     jest
       .spyOn(axios, 'get')
