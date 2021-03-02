@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import qs from 'qs';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ClientParams } from './types';
@@ -62,21 +63,17 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     return accessToken;
   };
 
-  instance.interceptors.request.use(async function (config) {
-    config.headers = {
+  instance.interceptors.request.use(async (config) => ({
+    ...config,
+    headers: {
       ...config.headers,
-      Authorization: `Bearer ${
-        accessToken ? accessToken : await getAccessToken()
-      }`,
-    };
-    return config;
-  });
+      Authorization: `Bearer ${accessToken || (await getAccessToken())}`,
+    },
+  }));
 
   instance.interceptors.response.use(
-    (response: AxiosResponse) => {
-      return response;
-    },
-    async function (error) {
+    (response: AxiosResponse) => response,
+    async (error) => {
       const originalRequest = error.config;
       if (
         error.response &&
@@ -85,8 +82,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
       ) {
         originalRequest._retry = true;
         accessToken = '';
-        originalRequest.headers.Authorization =
-          'Bearer ' + (await getAccessToken());
+        originalRequest.headers.Authorization = `Bearer ${await getAccessToken()}`;
         return instance(originalRequest);
       }
       return Promise.reject(error);

@@ -24,9 +24,11 @@ describe('Product', () => {
   });
 
   test('getOne', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getOne });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getOne }),
+      );
 
     const category = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models/test', {});
@@ -93,9 +95,11 @@ describe('Product', () => {
   });
 
   test('getAll', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getAll }),
+      );
 
     const { items: products } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {

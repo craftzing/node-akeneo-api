@@ -1,5 +1,6 @@
 import axios from 'axios';
 import createHttpClient from './http-client';
+
 const mockParams = {
   url: 'https://mockdata.com',
   username: 'username',

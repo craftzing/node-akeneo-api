@@ -4,6 +4,7 @@
  */
 
 /* eslint-disable no-underscore-dangle */
+import { AxiosInstance } from 'axios';
 import createHttpClient from './http-client';
 import {
   ClientParams,
@@ -22,14 +23,11 @@ import {
 import raw from './endpoints/raw';
 
 import * as endpoints from './endpoints';
-import { AxiosInstance } from 'axios';
 
 const ATTRIBUTES_PATH = '/api/rest/v1/attributes';
 const ASSET_MEDIA_FILES = '/api/rest/v1/asset-media-files';
 const REFERENCE_ENTITIES_MEDIA_FILES =
   '/api/rest/v1/reference-entities-media-files';
-
-export type AkeneoClientAPI = ReturnType<typeof createClient>;
 
 type EndpointDefinition<P extends Record<string, any>, R> = (
   http: AxiosInstance,
@@ -113,7 +111,7 @@ export const createClient = (params: ClientParams) => {
       getAll: wrap(http, endpoints.attribute.getAll),
       getOptions: wrap(http, endpoints.attribute.getOptions),
       add: async ({ code, attribute }: { code: string; attribute: any }) =>
-        await http.patch(`${ATTRIBUTES_PATH}/${code}`, attribute),
+        http.patch(`${ATTRIBUTES_PATH}/${code}`, attribute),
       addOption: async ({
         attributeCode,
         code,
@@ -123,7 +121,7 @@ export const createClient = (params: ClientParams) => {
         code: string;
         option: any;
       }) =>
-        await http.patch(
+        http.patch(
           `${ATTRIBUTES_PATH}/${attributeCode}/options/${code}`,
           option,
         ),
@@ -134,7 +132,7 @@ export const createClient = (params: ClientParams) => {
       /**
        * @see https://api.akeneo.com/api-reference.html#patch_reference_entity__code_
        */ add: async ({ code, body }: { code: string; body: any }) =>
-        await http.patch(`/api/rest/v1/reference-entities/${code}`, body),
+        http.patch(`/api/rest/v1/reference-entities/${code}`, body),
       /**
        * @see https://api.akeneo.com/api-reference.html#patch_reference_entity_attributes__code_
        */
@@ -191,6 +189,8 @@ export const createClient = (params: ClientParams) => {
     },
   };
 };
+
+export type AkeneoClientAPI = ReturnType<typeof createClient>;
 
 export default createClient;
 

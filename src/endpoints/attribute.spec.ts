@@ -27,9 +27,11 @@ describe('Attribute', () => {
   });
 
   test('getOne', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getOne });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getOne }),
+      );
 
     const attribute = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes/test', {});
@@ -96,9 +98,11 @@ describe('Attribute', () => {
   });
 
   test('getAll', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getAll }),
+      );
 
     const { items: attributes } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
@@ -112,9 +116,11 @@ describe('Attribute', () => {
   });
 
   test('getOptions', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getAll }),
+      );
 
     const { items: attributes } = await getOptions(axios, {
       attributeCode: 'back_material',
@@ -127,9 +133,11 @@ describe('Attribute', () => {
   });
 
   test('getOptions with params', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getAll }),
+      );
 
     const { items: attributes } = await getOptions(axios, {
       attributeCode: 'back_material',

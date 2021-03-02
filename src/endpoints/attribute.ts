@@ -15,13 +15,12 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: AttributeQueryParameters },
-): Promise<ListResponse & { items: Attribute[] }> => {
-  return raw.get(http, `/api/rest/v1/attributes`, {
+): Promise<ListResponse & { items: Attribute[] }> =>
+  raw.get(http, `/api/rest/v1/attributes`, {
     params: {
       ...params.query,
     },
   });
-};
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_attributes__code_
@@ -33,18 +32,15 @@ export const getOne = (
   }: {
     code: string;
   },
-): Promise<Attribute> => {
-  return raw.getOne(http, `/api/rest/v1/attributes/${code}`);
-};
+): Promise<Attribute> => raw.getOne(http, `/api/rest/v1/attributes/${code}`);
 
 export const getAll = (
   http: AxiosInstance,
   { query = {} }: { query?: AttributeQueryParameters },
-): Promise<ListResponse & { items: Attribute[] }> => {
-  return raw.getAll(http, `/api/rest/v1/attributes`, {
+): Promise<ListResponse & { items: Attribute[] }> =>
+  raw.getAll(http, `/api/rest/v1/attributes`, {
     params: query,
   });
-};
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_attributes__attribute_code__options
@@ -55,8 +51,7 @@ export const getOptions = (
     attributeCode,
     query,
   }: { attributeCode: string; query?: AttributeOptionQueryParameters },
-): Promise<ListResponse & { items: AttributeOption[] }> => {
-  return raw.get(http, `/api/rest/v1/attributes/${attributeCode}/options`, {
+): Promise<ListResponse & { items: AttributeOption[] }> =>
+  raw.get(http, `/api/rest/v1/attributes/${attributeCode}/options`, {
     params: query,
   });
-};

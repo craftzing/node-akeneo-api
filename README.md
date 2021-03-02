@@ -1,8 +1,7 @@
-![Gitlab code coverage](https://img.shields.io/gitlab/coverage/craftzing/akeneo-api/master)
-
 ![npm (scoped)](https://img.shields.io/npm/v/@craftzing/akeneo-api)
-
 ![NPM](https://img.shields.io/npm/l/@craftzing/akeneo-api)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/craftzing/akeneo-api/master)
+[![js-airbnb-style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/)
 
 ## Akeneo API
 

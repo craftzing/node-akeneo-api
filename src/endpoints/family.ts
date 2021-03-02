@@ -14,13 +14,12 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: FamilyQueryParameters },
-): Promise<ListResponse & { items: Family[] }> => {
-  return raw.get(http, `/api/rest/v1/families`, {
+): Promise<ListResponse & { items: Family[] }> =>
+  raw.get(http, `/api/rest/v1/families`, {
     params: {
       ...params.query,
     },
   });
-};
 /**
  * @see https://api.akeneo.com/api-reference.html#Familyvariant
  */
@@ -30,10 +29,9 @@ export const getVariants = (
     familyCode: string;
     query?: FamilyVariantQueryParameters;
   },
-): Promise<ListResponse & { items: Variant[] }> => {
-  return raw.get(http, `/api/rest/v1/families/${params.familyCode}/variants`, {
+): Promise<ListResponse & { items: Variant[] }> =>
+  raw.get(http, `/api/rest/v1/families/${params.familyCode}/variants`, {
     params: {
       ...params.query,
     },
   });
-};

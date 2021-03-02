@@ -28,9 +28,11 @@ describe('Category', () => {
   });
 
   test('getOne', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockCategoryResponse.getOne });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockCategoryResponse.getOne }),
+      );
 
     const category = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/categories/test', {
@@ -101,9 +103,11 @@ describe('Category', () => {
   });
 
   test('getAll', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockCategoryResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockCategoryResponse.getAll }),
+      );
 
     const { items: categories } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/categories', {

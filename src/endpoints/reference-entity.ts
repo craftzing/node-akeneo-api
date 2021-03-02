@@ -14,11 +14,10 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   { query }: { query?: ReferenceEntityQueryParameters },
-): Promise<ListResponse & { items: Entity[] }> => {
-  return raw.get(http, `/api/rest/v1/reference-entities`, {
+): Promise<ListResponse & { items: Entity[] }> =>
+  raw.get(http, `/api/rest/v1/reference-entities`, {
     params: query,
   });
-};
 /**
  * @see https://api.akeneo.com/api-reference.html#get_reference_entity_records
  */
@@ -31,12 +30,11 @@ export const getRecords = (
     referenceEntityCode: string;
     query?: ReferenceEntityRecordQueryParameters;
   },
-): Promise<ListResponse & { items: EntityRecord[] }> => {
-  return raw.get(
+): Promise<ListResponse & { items: EntityRecord[] }> =>
+  raw.get(
     http,
     `/api/rest/v1/reference-entities/${referenceEntityCode}/records`,
     {
       params: query,
     },
   );
-};

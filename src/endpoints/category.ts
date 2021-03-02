@@ -8,13 +8,12 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: CategoryQueryParameters },
-): Promise<ListResponse & { items: Category[] }> => {
-  return raw.get(http, `/api/rest/v1/categories`, {
+): Promise<ListResponse & { items: Category[] }> =>
+  raw.get(http, `/api/rest/v1/categories`, {
     params: {
       ...params.query,
     },
   });
-};
 
 /**
  * @see https://api.akeneo.com/api-reference.html#get_categories__code_
@@ -31,17 +30,15 @@ export const getOne = (
       with_quality_scores?: boolean;
     };
   },
-): Promise<Category> => {
-  return raw.getOne(http, `/api/rest/v1/categories/${code}`, {
+): Promise<Category> =>
+  raw.getOne(http, `/api/rest/v1/categories/${code}`, {
     params,
   });
-};
 
 export const getAll = (
   http: AxiosInstance,
   params: { query?: CategoryQueryParameters },
-): Promise<ListResponse & { items: Category[] }> => {
-  return raw.getAll(http, `/api/rest/v1/categories`, {
+): Promise<ListResponse & { items: Category[] }> =>
+  raw.getAll(http, `/api/rest/v1/categories`, {
     params,
   });
-};

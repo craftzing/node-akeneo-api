@@ -1,4 +1,4 @@
-import { createClient } from '../src/index';
+import { createClient } from './index';
 
 const mockParams = {
   url: 'https://mockdata.com',

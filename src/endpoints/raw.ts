@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { last } from 'ramda';
 import errorHandler from '../error-handler';

@@ -208,6 +208,8 @@ type ValuesRecord = {
   data: string | string[];
 };
 
+export declare type KeyValueMap = Record<string, any>;
+
 export type Entity = {
   code: string;
   labels: KeyValueMap;
@@ -216,8 +218,6 @@ export type EntityRecord = {
   code: string;
   values: Record<string, ValuesRecord[]>;
 };
-
-export declare type KeyValueMap = Record<string, any>;
 
 export type Category<T = KeyValueMap> = {
   code: string;

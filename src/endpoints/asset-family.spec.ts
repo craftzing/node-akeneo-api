@@ -31,9 +31,11 @@ describe('Attribute', () => {
   });
 
   test('getOne', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getOne });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getOne }),
+      );
 
     const attribute = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families/test', {});
@@ -41,9 +43,11 @@ describe('Attribute', () => {
   });
 
   test('getAll', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: mockResponse.getAll });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: mockResponse.getAll }),
+      );
 
     const { items: attributes } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families', {
@@ -57,9 +61,11 @@ describe('Attribute', () => {
   });
 
   test('getAssets', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: { _embedded: {} } });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: { _embedded: {} } }),
+      );
 
     await getAssets(axios, { assetFamilyCode: 'test' });
     expect(axios.get).toBeCalledWith(
@@ -69,12 +75,16 @@ describe('Attribute', () => {
   });
 
   test('getAssetsAll', async () => {
-    jest.spyOn(axios, 'get').mockImplementationOnce(async () => {
-      return Promise.resolve({ data: mockResponse.getAssetsAll[0] });
-    });
-    jest.spyOn(axios, 'get').mockImplementationOnce(async () => {
-      return Promise.resolve({ data: mockResponse.getAssetsAll[1] });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementationOnce(async () =>
+        Promise.resolve({ data: mockResponse.getAssetsAll[0] }),
+      );
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementationOnce(async () =>
+        Promise.resolve({ data: mockResponse.getAssetsAll[1] }),
+      );
 
     await getAssetsAll(axios, { assetFamilyCode: 'test' });
     expect(axios.get).toHaveBeenNthCalledWith(
@@ -92,9 +102,11 @@ describe('Attribute', () => {
   });
 
   test('getAsset', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      return Promise.resolve({ data: { _embedded: {} } });
-    });
+    jest
+      .spyOn(axios, 'get')
+      .mockImplementation(async () =>
+        Promise.resolve({ data: { _embedded: {} } }),
+      );
 
     await getAsset(axios, { assetFamilyCode: 'test', code: 'assetcode' });
     expect(axios.get).toBeCalledWith(
