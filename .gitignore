@@ -50,3 +50,4 @@ Thumbs.db
 *.wmv
 
 jest_html_reporters.html
+coverage
