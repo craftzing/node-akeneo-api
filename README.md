@@ -3,38 +3,89 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/craftzing/akeneo-api/master)
 [![js-airbnb-style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/)
 
-## Akeneo API
+# Akeneo API
 
-This is an unofficial attempt at a Node client for the Akeneo PIM REST API.
+This is an unofficial Node client for the Akeneo PIM REST API.
 
 More info at https://api.akeneo.com/api-reference-index.html
 
 Note: not all endpoints are implements. Mostly only the GET are available. YMMV
 
-### Features
+## Features
 
 - Easy typed access to your Akeneo environment
 - Built in token handling
 - Helper function to get all products or product models easily
 
-### Installation
+## Supported Environments
 
-- run `yarn link` in this folder
-- run `yarn link "akeneo-api"` in your project folder
+- node.js ([LTS](https://nodejs.org/en/about/releases/))
 
-### Your first request
+## Installation
+
+Using npm:
+
+```
+npm install @craftzing/akeneo-api
+```
+
+Using yarn:
+
+```
+yarn add @craftzing/akeneo-api
+```
+
+## Authentication
+
+Follow the instructions for your Akeneo version to get the required parameters:
+
+- clientId/secret: https://api.akeneo.com/documentation/authentication.html#client-idsecret-generation
+- username/password: https://api.akeneo.com/documentation/authentication.html#api-user-creation
+
+## Your first request
+
+With es6 imports
 
 ```
 import client from '@craftzing/akeneo-api';
 
 const akeneo = client({
-  baseURL,
-  username,
-  password,
-  clientId,
-  secret
-  // Optionally you can also pass in axiosOptions which will be passed to the Axios instance
+baseURL,
+username,
+password,
+clientId,
+secret
+// Optionally you can also pass in axiosOptions which will be passed to the Axios instance
 });
 
 console.log(await akeneo.productModels.getAll());
 ```
+
+## Documentation
+
+TODO: publish documentation.
+Available locally by running
+
+```
+yarn run build:docs
+```
+
+You can find the documentation in the docs directory
+
+## Support
+
+If you have a problem with this library, please file an [issue](https://github.com/craftzing/akeneo-api/issues/new) here on GitHub.
+
+If you have other problems with Akeneo not related to this library, you can contact their [Customer Support](https://www.akeneo.com/support/).
+
+## Versioning
+
+This project strictly follows [Semantic Versioning](http://semver.org/) by use of [semantic-release](https://github.com/semantic-release/semantic-release).
+
+TODO: use sematic-release
+
+You can check the changelog on the [releases](https://github.com/contentful/contentful-management.js/releases) page.
+
+## License
+
+MIT
