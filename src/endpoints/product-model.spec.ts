@@ -11,7 +11,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 describe('Product Model', () => {
-  test('get', async () => {
+  test('get product models', async () => {
     jest
       .spyOn(axios, 'get')
       .mockImplementation(async () =>

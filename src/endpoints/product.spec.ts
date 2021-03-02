@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 describe('Product', () => {
-  test('get', async () => {
+  test('get products', async () => {
     jest
       .spyOn(axios, 'get')
       .mockImplementation(async () =>
