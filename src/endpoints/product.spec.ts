@@ -10,7 +10,8 @@ import { getOne, get, getAll } from './product';
 
 const axiosGetSpy = jest.spyOn(axios, 'get');
 
-const mockFunction = (data) => async () => Promise.resolve({ data });
+const mockFunction = (data: Record<string, any>) => async () =>
+  Promise.resolve({ data });
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -49,7 +50,7 @@ describe('Product', () => {
     });
   });
 
-  test('Get with invalid parameters', async () => {
+  test('Get products with invalid parameters', async () => {
     axiosGetSpy.mockImplementation(async () => {
       throw createError(...mockError.badRequest);
     });
