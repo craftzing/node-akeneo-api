@@ -15,7 +15,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Attribute', () => {
+describe('Asset Family', () => {
   test('get', async () => {
     jest
       .spyOn(axios, 'get')
@@ -37,9 +37,9 @@ describe('Attribute', () => {
         Promise.resolve({ data: mockResponse.getOne }),
       );
 
-    const attribute = await getOne(axios, { code: 'test' });
+    const assetFamily = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families/test', {});
-    expect(attribute).toHaveProperty('code');
+    expect(assetFamily).toHaveProperty('code');
   });
 
   test('getAll', async () => {
@@ -49,7 +49,7 @@ describe('Attribute', () => {
         Promise.resolve({ data: mockResponse.getAll }),
       );
 
-    const { items: attributes } = await getAll(axios, {});
+    const { items: assetFamilies } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families', {
       params: {
         limit: 100,
@@ -57,7 +57,7 @@ describe('Attribute', () => {
         with_count: true,
       },
     });
-    expect(attributes).toHaveLength(1);
+    expect(assetFamilies).toHaveLength(1);
   });
 
   test('getAssets', async () => {

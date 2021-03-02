@@ -8,7 +8,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 describe('Family', () => {
-  test('get', async () => {
+  test('get families', async () => {
     jest
       .spyOn(axios, 'get')
       .mockImplementation(async () =>

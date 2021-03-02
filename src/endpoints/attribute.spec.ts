@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 describe('Attribute', () => {
-  test('get', async () => {
+  test('get attributes', async () => {
     jest
       .spyOn(axios, 'get')
       .mockImplementation(async () =>
@@ -26,7 +26,7 @@ describe('Attribute', () => {
     expect(items).toHaveLength(1);
   });
 
-  test('getOne', async () => {
+  test('getOne attribute', async () => {
     jest
       .spyOn(axios, 'get')
       .mockImplementation(async () =>
