@@ -35,6 +35,10 @@ Using yarn:
 yarn add @craftzing/akeneo-api
 ```
 
+## Typings
+
+This library also comes with typings to use with typescript.
+
 ## Authentication
 
 Follow the instructions for your Akeneo version to get the required parameters:
