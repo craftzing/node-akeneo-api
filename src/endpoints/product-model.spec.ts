@@ -7,15 +7,14 @@ import mockResponse from '../../mocks/product-model';
 import { getOne, get, getAll } from './product-model';
 
 const axiosGetSpy = jest.spyOn(axios, 'get');
+const mockFunction = (data) => async () => Promise.resolve({ data });
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 describe('Product Model', () => {
   test('get product models', async () => {
-    axiosGetSpy.mockImplementation(async () =>
-      Promise.resolve({ data: mockResponse.get }),
-    );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.get));
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {});
@@ -23,9 +22,7 @@ describe('Product Model', () => {
   });
 
   test('getOne', async () => {
-    axiosGetSpy.mockImplementation(async () =>
-      Promise.resolve({ data: mockResponse.getOne }),
-    );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.getOne));
 
     const category = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models/test', {});
@@ -33,9 +30,7 @@ describe('Product Model', () => {
   });
 
   test('Get with valid parameters', async () => {
-    axiosGetSpy.mockImplementation(async () =>
-      Promise.resolve({ data: mockResponse.get }),
-    );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.get));
 
     await get(axios, {
       query: {
@@ -90,9 +85,7 @@ describe('Product Model', () => {
   });
 
   test('getAll', async () => {
-    axiosGetSpy.mockImplementation(async () =>
-      Promise.resolve({ data: mockResponse.getAll }),
-    );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.getAll));
 
     const { items: products } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {
