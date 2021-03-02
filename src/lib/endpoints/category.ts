@@ -10,7 +10,9 @@ export const get = (
   params: { query?: CategoryQueryParameters },
 ): Promise<ListResponse & { items: Category[] }> => {
   return raw.get(http, `/api/rest/v1/categories`, {
-    params,
+    params: {
+      ...params.query,
+    },
   });
 };
 
@@ -19,7 +21,10 @@ export const get = (
  */
 export const getOne = (
   http: AxiosInstance,
-  params: {
+  {
+    code,
+    ...params
+  }: {
     code: string;
     query?: {
       with_attribute_options?: boolean;
@@ -27,7 +32,7 @@ export const getOne = (
     };
   },
 ): Promise<Category> => {
-  return raw.getOne(http, `/api/rest/v1/categories/${params.code}`, {
+  return raw.getOne(http, `/api/rest/v1/categories/${code}`, {
     params,
   });
 };

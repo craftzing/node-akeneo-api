@@ -7,12 +7,10 @@ import raw from './raw';
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: ProductQueryParameters },
+  { query }: { query?: ProductQueryParameters },
 ): Promise<ListResponse & { items: Product[] }> => {
   return raw.get(http, `/api/rest/v1/products`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
 
@@ -21,7 +19,10 @@ export const get = (
  */
 export const getOne = (
   http: AxiosInstance,
-  params: {
+  {
+    code,
+    query,
+  }: {
     code: string;
     query?: {
       with_attribute_options?: boolean;
@@ -29,20 +30,16 @@ export const getOne = (
     };
   },
 ): Promise<Product> => {
-  return raw.getOne(http, `/api/rest/v1/products/${params.code}`, {
-    params: {
-      ...params.query,
-    },
+  return raw.getOne(http, `/api/rest/v1/products/${code}`, {
+    params: query,
   });
 };
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: ProductQueryParameters },
+  { query = {} }: { query?: ProductQueryParameters },
 ): Promise<ListResponse & { items: Product[] }> => {
   return raw.getAll(http, `/api/rest/v1/products`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };

@@ -27,7 +27,10 @@ export const get = (
  */
 export const getOne = (
   http: AxiosInstance,
-  params: {
+  {
+    code,
+    query,
+  }: {
     code: string;
     query?: {
       with_attribute_options?: boolean;
@@ -35,21 +38,17 @@ export const getOne = (
     };
   },
 ): Promise<AssetFamily> => {
-  return raw.getOne(http, `/api/rest/v1/asset-families/${params.code}`, {
-    params: {
-      ...params.query,
-    },
+  return raw.getOne(http, `/api/rest/v1/asset-families/${code}`, {
+    params: query,
   });
 };
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: AssetFamilyQueryParameters },
+  { query }: { query?: AssetFamilyQueryParameters },
 ): Promise<ListResponse & { items: AssetFamily[] }> => {
   return raw.getAll(http, `/api/rest/v1/asset-families`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
 /**
@@ -57,15 +56,16 @@ export const getAll = (
  */
 export const getAssets = (
   http: AxiosInstance,
-  params: { assetFamilyCode: string; query?: AssetQueryParameters },
+  {
+    assetFamilyCode,
+    query,
+  }: { assetFamilyCode: string; query?: AssetQueryParameters },
 ): Promise<ListResponse & { items: Asset[] }> => {
   return raw.get(
     http,
-    `/api/rest/v1/asset-families/${params.assetFamilyCode}/assets`,
+    `/api/rest/v1/asset-families/${assetFamilyCode}/assets`,
     {
-      params: {
-        ...params.query,
-      },
+      params: query,
     },
   );
 };
@@ -74,29 +74,33 @@ export const getAssets = (
  */
 export const getAsset = (
   http: AxiosInstance,
-  params: {
+  {
+    assetFamilyCode,
+    code,
+  }: {
     assetFamilyCode: string;
     code: string;
   },
 ): Promise<Asset> => {
   return raw.getOne(
     http,
-    `/api/rest/v1/asset-families/${params.assetFamilyCode}/assets/${params.code}`,
+    `/api/rest/v1/asset-families/${assetFamilyCode}/assets/${code}`,
     {},
   );
 };
 
 export const getAssetsAll = (
   http: AxiosInstance,
-  params: { assetFamilyCode: string; query?: AssetQueryParameters },
+  {
+    assetFamilyCode,
+    query,
+  }: { assetFamilyCode: string; query?: AssetQueryParameters },
 ): Promise<ListResponse & { items: Asset[] }> => {
   return raw.getAllBySearchAfter(
     http,
-    `/api/rest/v1/asset-families/${params.assetFamilyCode}/assets`,
+    `/api/rest/v1/asset-families/${assetFamilyCode}/assets`,
     {
-      params: {
-        ...params.query,
-      },
+      params: query,
     },
   );
 };

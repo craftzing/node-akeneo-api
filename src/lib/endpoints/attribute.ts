@@ -28,21 +28,21 @@ export const get = (
  */
 export const getOne = (
   http: AxiosInstance,
-  params: {
+  {
+    code,
+  }: {
     code: string;
   },
 ): Promise<Attribute> => {
-  return raw.getOne(http, `/api/rest/v1/attributes/${params.code}`, {});
+  return raw.getOne(http, `/api/rest/v1/attributes/${code}`);
 };
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: AttributeQueryParameters },
+  { query = {} }: { query?: AttributeQueryParameters },
 ): Promise<ListResponse & { items: Attribute[] }> => {
   return raw.getAll(http, `/api/rest/v1/attributes`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
 
@@ -51,15 +51,12 @@ export const getAll = (
  */
 export const getOptions = (
   http: AxiosInstance,
-  params: { attributeCode: string; query?: AttributeOptionQueryParameters },
+  {
+    attributeCode,
+    query,
+  }: { attributeCode: string; query?: AttributeOptionQueryParameters },
 ): Promise<ListResponse & { items: AttributeOption[] }> => {
-  return raw.get(
-    http,
-    `/api/rest/v1/attributes/${params.attributeCode}/options`,
-    {
-      params: {
-        ...params.query,
-      },
-    },
-  );
+  return raw.get(http, `/api/rest/v1/attributes/${attributeCode}/options`, {
+    params: query,
+  });
 };

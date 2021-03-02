@@ -11,12 +11,10 @@ import raw from './raw';
  */
 export const get = (
   http: AxiosInstance,
-  params: { query?: ProductModelQueryParameters },
+  { query }: { query?: ProductModelQueryParameters },
 ): Promise<ListResponse & { items: ProductModel[] }> => {
   return raw.get(http, `/api/rest/v1/product-models`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
 
@@ -34,11 +32,9 @@ export const getOne = (
 
 export const getAll = (
   http: AxiosInstance,
-  params: { query?: ProductModelQueryParameters },
+  { query }: { query?: ProductModelQueryParameters },
 ): Promise<ListResponse & { items: ProductModel[] }> => {
   return raw.getAll(http, `/api/rest/v1/product-models`, {
-    params: {
-      ...params.query,
-    },
+    params: query,
   });
 };
