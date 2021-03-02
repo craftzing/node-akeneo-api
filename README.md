@@ -7,7 +7,7 @@
 
 This is an unofficial Node client for the Akeneo PIM REST API.
 
-More info at https://api.akeneo.com/api-reference-index.html
+More info at [Akeneo REST API reference](https://api.akeneo.com/api-reference-index.html)
 
 Note: not all endpoints are implements. Mostly only the GET are available. YMMV
 
@@ -25,13 +25,13 @@ Note: not all endpoints are implements. Mostly only the GET are available. YMMV
 
 Using npm:
 
-```
+```sh
 npm install @craftzing/akeneo-api
 ```
 
 Using yarn:
 
-```
+```sh
 yarn add @craftzing/akeneo-api
 ```
 
@@ -39,23 +39,23 @@ yarn add @craftzing/akeneo-api
 
 Follow the instructions for your Akeneo version to get the required parameters:
 
-- clientId/secret: https://api.akeneo.com/documentation/authentication.html#client-idsecret-generation
-- username/password: https://api.akeneo.com/documentation/authentication.html#api-user-creation
+- clientId/secret: [client-idsecret-generation](https://api.akeneo.com/documentation/authentication.html#client-idsecret-generation)
+- username/password: [api-user-creation](https://api.akeneo.com/documentation/authentication.html#api-user-creation)
 
 ## Your first request
 
 With es6 imports
 
-```
+```js
 import client from '@craftzing/akeneo-api';
 
 const akeneo = client({
-baseURL,
-username,
-password,
-clientId,
-secret
-// Optionally you can also pass in axiosOptions which will be passed to the Axios instance
+  baseURL,
+  username,
+  password,
+  clientId,
+  secret,
+  // Optionally you can also pass in axiosOptions which will be passed to the Axios instance
 });
 
 console.log(await akeneo.productModels.getAll());
@@ -66,7 +66,7 @@ console.log(await akeneo.productModels.getAll());
 TODO: publish documentation.
 Available locally by running
 
-```
+```sh
 yarn run build:docs
 ```
 
