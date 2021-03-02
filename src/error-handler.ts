@@ -6,7 +6,7 @@ export default function errorHandler(errorResponse: AxiosError): never {
   let errorName;
 
   // Obscure the Authorization token
-  if (config.headers && config.headers.Authorization) {
+  if (config && config.headers && config.headers.Authorization) {
     const token = `...${config.headers.Authorization.substr(-5)}`;
     config.headers.Authorization = `Bearer ${token}`;
   }
