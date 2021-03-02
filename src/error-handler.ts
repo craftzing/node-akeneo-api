@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 
 export default function errorHandler(errorResponse: AxiosError): never {
   const { config, response } = errorResponse;
-  let errorName;
 
   // Obscure the Authorization token
   if (config && config.headers && config.headers.Authorization) {
@@ -25,22 +24,18 @@ export default function errorHandler(errorResponse: AxiosError): never {
     statusText: response?.statusText,
     message: data && 'message' in data ? data.message : '',
     details: data && 'details' in data ? data.details : '',
+    request: config
+      ? {
+          url: config.url,
+          headers: config.headers,
+          method: config.method,
+          payloadData: config.data,
+        }
+      : {},
   };
 
-  if (config) {
-    errorData.request = {
-      url: config.url,
-      headers: config.headers,
-      method: config.method,
-      payloadData: config.data,
-    };
-  }
-
   const error = new Error();
-  error.name =
-    errorName && errorName !== 'Unknown'
-      ? errorName
-      : `${response?.status} ${response?.statusText}`;
+  error.name = `${response?.status} ${response?.statusText}`;
 
   try {
     error.message = JSON.stringify(errorData, null, '  ');
