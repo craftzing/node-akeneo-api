@@ -4,6 +4,7 @@ import axios from 'axios';
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
 import mockResponse from '../../mocks/attribute';
+import mockError from '../../mocks/error';
 
 import { getOne, get, getAll, getOptions } from './attribute';
 
@@ -56,22 +57,7 @@ describe('Attribute', () => {
 
   test('Get with invalid parameters', async () => {
     axiosGetSpy.mockImplementation(async () => {
-      throw createError(
-        'Request failed with status code 400',
-        { params: { search: 'test' } },
-        null,
-        {},
-        {
-          status: 400,
-          statusText: 'Bad request',
-          data: {
-            code: 400,
-            message: 'Search query parameter should be valid JSON.',
-          },
-          headers: {},
-          config: {},
-        },
-      );
+      throw createError(...mockError.badRequest);
     });
 
     await expect(() =>

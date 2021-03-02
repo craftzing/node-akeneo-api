@@ -3,6 +3,7 @@ import axios from 'axios';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
+import mockError from '../../mocks/error';
 import mockCategoryResponse from '../../mocks/category';
 
 import { getOne, get, getAll } from './category';
@@ -58,22 +59,7 @@ describe('Category', () => {
 
   test('Get with invalid parameters', async () => {
     axiosGetSpy.mockImplementation(async () => {
-      throw createError(
-        'Request failed with status code 400',
-        { params: { search: 'test' } },
-        null,
-        {},
-        {
-          status: 400,
-          statusText: 'Bad request',
-          data: {
-            code: 400,
-            message: 'Search query parameter should be valid JSON.',
-          },
-          headers: {},
-          config: {},
-        },
-      );
+      throw createError(...mockError.badRequest);
     });
 
     await expect(() =>
