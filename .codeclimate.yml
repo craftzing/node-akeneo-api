@@ -1,2 +1,5 @@
 exclude_patterns:
   - '**/*spec.ts'
+similar-code:
+  config:
+    threshold: 50
