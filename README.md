@@ -38,7 +38,8 @@ Using yarn:
 yarn add @craftzing/akeneo-api
 ```
 
-##  ⚙️ Configuration
+## ⚙️ Configuration
+
 ### Authentication
 
 Follow the instructions for your Akeneo version to get the required parameters:
@@ -67,14 +68,7 @@ console.log(await akeneo.productModel.getAll());
 
 ## 📚 Docs
 
-TODO: publish documentation.
-Available locally by running
-
-```sh
-yarn run build:docs
-```
-
-You can find the documentation in the docs directory
+- [docs](https://craftzing.github.io/node-akeneo-api/)
 
 ## 📝 Changelog
 
