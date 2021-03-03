@@ -2,4 +2,4 @@ exclude_patterns:
   - '**/*spec.ts'
 similar-code:
   config:
-    threshold: 50
+    threshold: 75
