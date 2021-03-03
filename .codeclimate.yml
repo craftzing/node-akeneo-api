@@ -3,7 +3,7 @@ exclude_patterns:
   - '**/*spec.ts'
 plugins:
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
         - typescript
