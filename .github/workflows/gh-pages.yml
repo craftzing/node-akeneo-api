@@ -1,4 +1,5 @@
 name: Github pages
+
 on: [push]
 
 jobs:
@@ -8,10 +9,8 @@ jobs:
       - name: Checkout
       - uses: actions/checkout@v2
 
-      - name: Install and Build Docs
-        run: |
-          npm install
-          npm run build:docs
+      - run: npm install
+      - run: npm run build:docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.0.0
