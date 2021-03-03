@@ -16,6 +16,7 @@ const defaultConfig = {
   basePath: '',
   adapter: undefined,
   maxContentLength: 1073741824, // 1GB
+  paramsSerializer: qs.stringify,
 };
 
 /**
@@ -27,29 +28,22 @@ const defaultConfig = {
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
 
-  const { url: baseURL } = options;
+  const { url: baseURL, clientId, secret, username, password } = options;
   const axiosConfig: AxiosRequestConfig = {
     ...defaultConfig,
     ...(options.axiosOptions || {}),
     baseURL,
-    paramsSerializer: qs.stringify,
   };
 
   const instance = axios.create(axiosConfig) as AxiosInstance;
 
-  const base64Encoded = Buffer.from(
-    `${options.clientId}:${options.secret}`,
-  ).toString('base64');
+  const base64Encoded = Buffer.from(`${clientId}:${secret}`).toString('base64');
 
   const getAccessToken = async () => {
     if (!accessToken) {
       const tokenResult = await axios.post(
         `${baseURL}${TOKEN_PATH}`,
-        {
-          grant_type: 'password',
-          username: options.username,
-          password: options.password,
-        },
+        { grant_type: 'password', username, password },
         {
           headers: {
             Authorization: `Basic ${base64Encoded}`,
