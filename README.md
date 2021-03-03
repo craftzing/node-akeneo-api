@@ -1,10 +1,10 @@
-![npm (scoped)](https://img.shields.io/npm/v/@craftzing/akeneo-api)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/craftzing/akeneo-api/master)
-![GitHub](https://img.shields.io/github/license/craftzing/node-akeneo-api)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/craftzing/node-akeneo-api/test-and-coverage/master)
-![Code Climate coverage](https://img.shields.io/codeclimate/coverage/craftzing/akeneo-api)
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/craftzing/akeneo-api)
+[![Quality assurance](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml)
+[![Code style](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/90013a42a4dce3766813/test_coverage)](https://codeclimate.com/github/craftzing/akeneo-api/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/90013a42a4dce3766813/maintainability)](https://codeclimate.com/github/craftzing/akeneo-api/maintainability)
+![Software License](https://img.shields.io/github/license/craftzing/node-akeneo-api)
 [![js-airbnb-style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/)
+![npm (scoped)](https://img.shields.io/npm/v/@craftzing/akeneo-api)
 
 # Akeneo API
 
