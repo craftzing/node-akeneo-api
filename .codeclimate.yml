@@ -1,2 +1,2 @@
 exclude_patterns:
-  - '*spec.ts'
+  - '**/*spec.ts'
