@@ -7,6 +7,7 @@ plugins:
     config:
       languages:
         typescript:
+          mass_threshold: 75
           similar-code:
             config:
               threshold: 95
