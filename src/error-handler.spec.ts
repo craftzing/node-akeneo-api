@@ -1,6 +1,8 @@
 import { AxiosError } from 'axios';
 import errorHandler from './error-handler';
 
+import mockError from '../mocks/error';
+
 describe('errorHandler', () => {
   test('Throws well formed error', async () => {
     const errorMock: AxiosError = {
@@ -22,19 +24,7 @@ describe('errorHandler', () => {
     };
 
     expect(() => errorHandler(errorMock)).toThrow(
-      new Error(
-        JSON.stringify(
-          {
-            status: 400,
-            statusText: 'Bad request',
-            message: 'Search query parameter should be valid JSON.',
-            details: {},
-            request: {},
-          },
-          null,
-          '  ',
-        ),
-      ),
+      new Error(JSON.stringify(mockError.response, null, '  ')),
     );
   });
 

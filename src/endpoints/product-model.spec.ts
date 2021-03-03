@@ -4,19 +4,19 @@ import axios from 'axios';
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
 import mockResponse from '../../mocks/product-model';
-
+import mockError from '../../mocks/error';
 import { getOne, get, getAll } from './product-model';
+
+const axiosGetSpy = jest.spyOn(axios, 'get');
+const mockFunction = (data: Record<string, any>) => async () =>
+  Promise.resolve({ data });
 
 afterEach(() => {
   jest.clearAllMocks();
 });
-describe('Product', () => {
-  test('get', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+describe('Product Model', () => {
+  test('get product models', async () => {
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.get));
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {});
@@ -24,11 +24,7 @@ describe('Product', () => {
   });
 
   test('getOne', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getOne }),
-      );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.getOne));
 
     const category = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models/test', {});
@@ -36,11 +32,7 @@ describe('Product', () => {
   });
 
   test('Get with valid parameters', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.get));
 
     await get(axios, {
       query: {
@@ -55,51 +47,20 @@ describe('Product', () => {
     });
   });
 
-  test('Get with invalid parameters', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      throw createError(
-        'Request failed with status code 400',
-        { params: { search: 'test' } },
-        null,
-        {},
-        {
-          status: 400,
-          statusText: 'Bad request',
-          data: {
-            code: 400,
-            message: 'Search query parameter should be valid JSON.',
-          },
-          headers: {},
-          config: {},
-        },
-      );
+  test('Get product models with invalid parameters', async () => {
+    axiosGetSpy.mockImplementation(async () => {
+      throw createError(...mockError.badRequest);
     });
 
     await expect(() =>
       get(axios, { query: { search: 'test' } }),
     ).rejects.toThrow(
-      new Error(
-        JSON.stringify(
-          {
-            status: 400,
-            statusText: 'Bad request',
-            message: 'Search query parameter should be valid JSON.',
-            details: {},
-            request: {},
-          },
-          null,
-          '  ',
-        ),
-      ),
+      new Error(JSON.stringify(mockError.response, null, '  ')),
     );
   });
 
   test('getAll', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getAll }),
-      );
+    axiosGetSpy.mockImplementation(mockFunction(mockResponse.getAll));
 
     const { items: products } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {

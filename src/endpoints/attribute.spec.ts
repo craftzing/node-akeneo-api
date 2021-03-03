@@ -4,20 +4,21 @@ import axios from 'axios';
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
 import mockResponse from '../../mocks/attribute';
+import mockError from '../../mocks/error';
 
 import { getOne, get, getAll, getOptions } from './attribute';
+
+const axiosGetSpy = jest.spyOn(axios, 'get');
 
 afterEach(() => {
   jest.clearAllMocks();
 });
 
 describe('Attribute', () => {
-  test('get', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+  test('get attributes', async () => {
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     const { items } = await get(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
@@ -26,12 +27,10 @@ describe('Attribute', () => {
     expect(items).toHaveLength(1);
   });
 
-  test('getOne', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getOne }),
-      );
+  test('getOne attribute', async () => {
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getOne }),
+    );
 
     const attribute = await getOne(axios, { code: 'test' });
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes/test', {});
@@ -39,11 +38,9 @@ describe('Attribute', () => {
   });
 
   test('Get with valid parameters', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.get }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.get }),
+    );
 
     await get(axios, {
       query: {
@@ -59,50 +56,21 @@ describe('Attribute', () => {
   });
 
   test('Get with invalid parameters', async () => {
-    jest.spyOn(axios, 'get').mockImplementation(async () => {
-      throw createError(
-        'Request failed with status code 400',
-        { params: { search: 'test' } },
-        null,
-        {},
-        {
-          status: 400,
-          statusText: 'Bad request',
-          data: {
-            code: 400,
-            message: 'Search query parameter should be valid JSON.',
-          },
-          headers: {},
-          config: {},
-        },
-      );
+    axiosGetSpy.mockImplementation(async () => {
+      throw createError(...mockError.badRequest);
     });
 
     await expect(() =>
       get(axios, { query: { search: 'test' } }),
     ).rejects.toThrow(
-      new Error(
-        JSON.stringify(
-          {
-            status: 400,
-            statusText: 'Bad request',
-            message: 'Search query parameter should be valid JSON.',
-            details: {},
-            request: {},
-          },
-          null,
-          '  ',
-        ),
-      ),
+      new Error(JSON.stringify(mockError.response, null, '  ')),
     );
   });
 
   test('getAll', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getAll }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getAll }),
+    );
 
     const { items: attributes } = await getAll(axios, {});
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
@@ -116,11 +84,9 @@ describe('Attribute', () => {
   });
 
   test('getOptions', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getAll }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getAll }),
+    );
 
     const { items: attributes } = await getOptions(axios, {
       attributeCode: 'back_material',
@@ -133,11 +99,9 @@ describe('Attribute', () => {
   });
 
   test('getOptions with params', async () => {
-    jest
-      .spyOn(axios, 'get')
-      .mockImplementation(async () =>
-        Promise.resolve({ data: mockResponse.getAll }),
-      );
+    axiosGetSpy.mockImplementation(async () =>
+      Promise.resolve({ data: mockResponse.getAll }),
+    );
 
     const { items: attributes } = await getOptions(axios, {
       attributeCode: 'back_material',

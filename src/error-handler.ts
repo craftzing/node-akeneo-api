@@ -1,16 +1,15 @@
 import { path } from 'ramda';
 import { AxiosError } from 'axios';
 
-export default function errorHandler(errorResponse: AxiosError): never {
-  const { config, response } = errorResponse;
-  let errorName;
+const cleanHeaders = (headers: Record<string, any>) =>
+  headers && headers.Authorization
+    ? {
+        ...headers,
+        Authorization: `Bearer ${`...${headers.Authorization.substr(-5)}`}`,
+      }
+    : headers;
 
-  // Obscure the Authorization token
-  if (config && config.headers && config.headers.Authorization) {
-    const token = `...${config.headers.Authorization.substr(-5)}`;
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
+export default function errorHandler({ config, response }: AxiosError): never {
   const data = response?.data;
 
   const errorData: {
@@ -23,33 +22,20 @@ export default function errorHandler(errorResponse: AxiosError): never {
   } = {
     status: response?.status,
     statusText: response?.statusText,
-    message: '',
-    details: {},
+    message: data && 'message' in data ? data.message : '',
+    details: data && 'details' in data ? data.details : {},
+    request: config
+      ? {
+          url: config.url,
+          headers: cleanHeaders(config.headers), // Obscure the Authorization token
+          method: config.method,
+          payloadData: config.data,
+        }
+      : {},
   };
 
-  if (config) {
-    errorData.request = {
-      url: config.url,
-      headers: config.headers,
-      method: config.method,
-      payloadData: config.data,
-    };
-  }
-
-  if (data) {
-    if ('message' in data) {
-      errorData.message = data.message || '';
-    }
-    if ('details' in data) {
-      errorData.details = data.details || {};
-    }
-  }
-
   const error = new Error();
-  error.name =
-    errorName && errorName !== 'Unknown'
-      ? errorName
-      : `${response?.status} ${response?.statusText}`;
+  error.name = `${response?.status} ${response?.statusText}`;
 
   try {
     error.message = JSON.stringify(errorData, null, '  ');

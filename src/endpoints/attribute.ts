@@ -38,7 +38,7 @@ export const getAll = (
   http: AxiosInstance,
   { query = {} }: { query?: AttributeQueryParameters },
 ): Promise<ListResponse & { items: Attribute[] }> =>
-  raw.getAll(http, `/api/rest/v1/attributes`, {
+  raw.getAllByPage(http, `/api/rest/v1/attributes`, {
     params: query,
   });
 

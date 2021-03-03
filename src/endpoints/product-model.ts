@@ -32,6 +32,6 @@ export const getAll = (
   http: AxiosInstance,
   { query }: { query?: ProductModelQueryParameters },
 ): Promise<ListResponse & { items: ProductModel[] }> =>
-  raw.getAll(http, `/api/rest/v1/product-models`, {
+  raw.getAllByPage(http, `/api/rest/v1/product-models`, {
     params: query,
   });

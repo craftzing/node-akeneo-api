@@ -1,7 +1,23 @@
 /* eslint-disable no-underscore-dangle */
 import qs from 'qs';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { ClientParams } from './types';
+
+const TOKEN_PATH = '/api/oauth/v1/token';
+
+const defaultConfig = {
+  insecure: false,
+  retryOnError: true,
+  headers: {} as Record<string, unknown>,
+  httpAgent: false,
+  httpsAgent: false,
+  timeout: 30000,
+  proxy: false as const,
+  basePath: '',
+  adapter: undefined,
+  maxContentLength: 1073741824, // 1GB
+  paramsSerializer: qs.stringify,
+};
 
 /**
  * Create pre configured axios instance
@@ -11,55 +27,26 @@ import { ClientParams } from './types';
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
-
-  const defaultConfig = {
-    insecure: false,
-    retryOnError: true,
-    headers: {} as Record<string, unknown>,
-    httpAgent: false,
-    httpsAgent: false,
-    timeout: 30000,
-    proxy: false as const,
-    basePath: '',
-    adapter: undefined,
-    maxContentLength: 1073741824, // 1GB
-  };
-
-  const { url: baseURL } = options;
-  const axiosConfig: AxiosRequestConfig = {
+  const { url: baseURL, clientId, secret, username, password } = options;
+  const instance = axios.create({
     ...defaultConfig,
     ...(options.axiosOptions || {}),
     baseURL,
-    paramsSerializer: qs.stringify,
-  };
+  }) as AxiosInstance;
+  const base64Encoded = Buffer.from(`${clientId}:${secret}`).toString('base64');
 
-  const instance = axios.create(axiosConfig) as AxiosInstance;
-
-  const TOKEN_PATH = '/api/oauth/v1/token';
-
-  const base64EncodedBuffer = Buffer.from(
-    `${options.clientId}:${options.secret}`,
-  );
-  const base64Encoded = base64EncodedBuffer.toString('base64');
-
-  const getAccessToken = async () => {
-    if (!accessToken) {
-      const tokenResult = await axios.post(
-        `${baseURL}${TOKEN_PATH}`,
-        {
-          grant_type: 'password',
-          username: options.username,
-          password: options.password,
+  const refreshAccessToken = async () => {
+    const tokenResult = await axios.post(
+      `${baseURL}${TOKEN_PATH}`,
+      { grant_type: 'password', username, password },
+      {
+        headers: {
+          Authorization: `Basic ${base64Encoded}`,
         },
-        {
-          headers: {
-            Authorization: `Basic ${base64Encoded}`,
-          },
-        },
-      );
+      },
+    );
 
-      accessToken = tokenResult.data.access_token;
-    }
+    accessToken = tokenResult.data.access_token;
     return accessToken;
   };
 
@@ -67,7 +54,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     ...config,
     headers: {
       ...config.headers,
-      Authorization: `Bearer ${accessToken || (await getAccessToken())}`,
+      Authorization: `Bearer ${accessToken || (await refreshAccessToken())}`,
     },
   }));
 
@@ -82,7 +69,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
       ) {
         originalRequest._retry = true;
         accessToken = '';
-        originalRequest.headers.Authorization = `Bearer ${await getAccessToken()}`;
+        originalRequest.headers.Authorization = `Bearer ${await refreshAccessToken()}`;
         return instance(originalRequest);
       }
       return Promise.reject(error);

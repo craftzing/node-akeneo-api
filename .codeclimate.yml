@@ -1,0 +1,10 @@
+version: '2'
+exclude_patterns:
+  - '**/*spec.ts'
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        typescript:
+          mass_threshold: 100
