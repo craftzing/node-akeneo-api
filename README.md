@@ -14,17 +14,17 @@ More info at [Akeneo REST API reference](https://api.akeneo.com/api-reference-in
 
 Note: not all endpoints are implements. Mostly only the GET are available. YMMV
 
-## Features
+## 🔥 Features
 
-- Easy typed access to your Akeneo environment
+- Easy typed access to your Akeneo environment via Typescript
 - Built in token handling
 - Helper function to get all products or product models easily
 
-## Supported Environments
+## ⚒️ Requirements
 
 - node.js ([LTS](https://nodejs.org/en/about/releases/))
 
-## Installation
+## 🧙 Installation
 
 Using npm:
 
@@ -38,18 +38,15 @@ Using yarn:
 yarn add @craftzing/akeneo-api
 ```
 
-## Typings
-
-This library also comes with typings to use with typescript.
-
-## Authentication
+##  ⚙️ Configuration
+### Authentication
 
 Follow the instructions for your Akeneo version to get the required parameters:
 
 - clientId/secret: [client-idsecret-generation](https://api.akeneo.com/documentation/authentication.html#client-idsecret-generation)
 - username/password: [api-user-creation](https://api.akeneo.com/documentation/authentication.html#api-user-creation)
 
-## Your first request
+### Your first request
 
 With es6 imports
 
@@ -68,7 +65,7 @@ const akeneo = client({
 console.log(await akeneo.productModel.getAll());
 ```
 
-## Documentation
+## 📚 Docs
 
 TODO: publish documentation.
 Available locally by running
@@ -79,20 +76,21 @@ yarn run build:docs
 
 You can find the documentation in the docs directory
 
-## Support
+## 📝 Changelog
+
+You can check the changelog on the [releases](https://github.com/craftzing/node-akeneo-api/releases) page.
+
+## 🤝 Support
 
 If you have a problem with this library, please file an [issue](https://github.com/craftzing/akeneo-api/issues/new) here on GitHub.
 
 If you have other problems with Akeneo not related to this library, you can contact their [Customer Support](https://www.akeneo.com/support/).
 
-## Versioning
+## 💙 Thanks to...
 
-This project strictly follows [Semantic Versioning](http://semver.org/) by use of [semantic-release](https://github.com/semantic-release/semantic-release).
+- [The entire Craftzing team](https://craftzing.com)
+- [All current and future contributors](https://github.com/craftzing/node-akeneo-api/graphs/contributors)
 
-TODO: use sematic-release
+## 🔑 License
 
-You can check the changelog on the [releases](https://github.com/contentful/contentful-management.js/releases) page.
-
-## License
-
-MIT
+The MIT License (MIT). Please see [License File](/LICENSE) for more information.
