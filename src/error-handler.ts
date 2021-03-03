@@ -23,7 +23,7 @@ export default function errorHandler({ config, response }: AxiosError): never {
     status: response?.status,
     statusText: response?.statusText,
     message: data && 'message' in data ? data.message : '',
-    details: data && 'details' in data ? data.details : '',
+    details: data && 'details' in data ? data.details : {},
     request: config
       ? {
           url: config.url,

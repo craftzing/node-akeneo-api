@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import qs from 'qs';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { ClientParams } from './types';
 
 const TOKEN_PATH = '/api/oauth/v1/token';
@@ -27,44 +27,36 @@ const defaultConfig = {
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
-
   const { url: baseURL, clientId, secret, username, password } = options;
-  const axiosConfig: AxiosRequestConfig = {
+  const instance = axios.create({
     ...defaultConfig,
     ...(options.axiosOptions || {}),
     baseURL,
-  };
-
-  const instance = axios.create(axiosConfig) as AxiosInstance;
-
+  }) as AxiosInstance;
   const base64Encoded = Buffer.from(`${clientId}:${secret}`).toString('base64');
 
-  const getAccessToken = async () => {
-    if (!accessToken) {
-      const tokenResult = await axios.post(
-        `${baseURL}${TOKEN_PATH}`,
-        { grant_type: 'password', username, password },
-        {
-          headers: {
-            Authorization: `Basic ${base64Encoded}`,
-          },
+  const refreshAccessToken = async () => {
+    const tokenResult = await axios.post(
+      `${baseURL}${TOKEN_PATH}`,
+      { grant_type: 'password', username, password },
+      {
+        headers: {
+          Authorization: `Basic ${base64Encoded}`,
         },
-      );
+      },
+    );
 
-      accessToken = tokenResult.data.access_token;
-    }
+    accessToken = tokenResult.data.access_token;
     return accessToken;
   };
 
-  const requestInterceptor = async (config: AxiosRequestConfig) => ({
+  instance.interceptors.request.use(async (config) => ({
     ...config,
     headers: {
       ...config.headers,
-      Authorization: `Bearer ${accessToken || (await getAccessToken())}`,
+      Authorization: `Bearer ${accessToken || (await refreshAccessToken())}`,
     },
-  });
-
-  instance.interceptors.request.use(requestInterceptor);
+  }));
 
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,
@@ -77,7 +69,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
       ) {
         originalRequest._retry = true;
         accessToken = '';
-        originalRequest.headers.Authorization = `Bearer ${await getAccessToken()}`;
+        originalRequest.headers.Authorization = `Bearer ${await refreshAccessToken()}`;
         return instance(originalRequest);
       }
       return Promise.reject(error);
