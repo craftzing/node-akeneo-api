@@ -3,11 +3,11 @@ exclude_patterns:
   - '**/*spec.ts'
 plugins:
   duplication:
-    enabled: false
+    enabled: true
     config:
       languages:
         - typescript
     checks:
       similar-code:
         config:
-          threshold: 75
+          threshold: 95
