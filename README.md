@@ -1,7 +1,7 @@
 ![npm (scoped)](https://img.shields.io/npm/v/@craftzing/akeneo-api)
-![NPM](https://img.shields.io/npm/l/@craftzing/akeneo-api)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/craftzing/akeneo-api/master)
-
+![GitHub](https://img.shields.io/github/license/craftzing/node-akeneo-api)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/craftzing/node-akeneo-api/test-and-coverage/master)
 ![Code Climate coverage](https://img.shields.io/codeclimate/coverage/craftzing/akeneo-api)
 ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/craftzing/akeneo-api)
 [![js-airbnb-style](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/)
