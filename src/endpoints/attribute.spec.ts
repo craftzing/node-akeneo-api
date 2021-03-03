@@ -63,19 +63,7 @@ describe('Attribute', () => {
     await expect(() =>
       get(axios, { query: { search: 'test' } }),
     ).rejects.toThrow(
-      new Error(
-        JSON.stringify(
-          {
-            status: 400,
-            statusText: 'Bad request',
-            message: 'Search query parameter should be valid JSON.',
-            details: {},
-            request: {},
-          },
-          null,
-          '  ',
-        ),
-      ),
+      new Error(JSON.stringify(mockError.response, null, '  ')),
     );
   });
 

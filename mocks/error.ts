@@ -15,4 +15,11 @@ export default {
       config: {},
     },
   ],
+  response: {
+    status: 400,
+    statusText: 'Bad request',
+    message: 'Search query parameter should be valid JSON.',
+    details: {},
+    request: {},
+  },
 };
