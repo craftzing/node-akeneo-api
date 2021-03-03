@@ -45,7 +45,7 @@ export const getAll = (
   http: AxiosInstance,
   { query }: { query?: AssetFamilyQueryParameters },
 ): Promise<ListResponse & { items: AssetFamily[] }> =>
-  raw.getAll(http, `/api/rest/v1/asset-families`, {
+  raw.getAllByPage(http, `/api/rest/v1/asset-families`, {
     params: query,
   });
 /**

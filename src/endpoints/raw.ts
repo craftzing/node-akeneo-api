@@ -43,12 +43,11 @@ export default {
         return data;
       }, errorHandler);
   },
-  getAll: async function getAll(
+  getAllByPage: async function getAllByPage(
     http: AxiosInstance,
     url: string,
-    config?: AxiosRequestConfig,
+    { params = {} }: AxiosRequestConfig,
   ): Promise<ListResponse & { items: any[] }> {
-    const params = config?.params;
     const page = params?.page || 1;
     const { items_count = 0, items } = await this.get(http, url, {
       params: {
@@ -59,26 +58,24 @@ export default {
       },
     });
 
-    if (items_count / 100 > page) {
-      const res = {
-        items: [
-          ...items,
-          ...(
-            await this.getAll(http, url, {
-              params: {
-                ...params,
-                limit: params?.limit || 100,
-                page: page + 1,
-              },
-            })
-          ).items,
-        ],
-      };
-      return res;
-    }
-    return { items };
+    return items_count / 100 > page
+      ? {
+          items: [
+            ...items,
+            ...(
+              await this.getAllByPage(http, url, {
+                params: {
+                  ...params,
+                  limit: 100,
+                  page: page + 1,
+                },
+              })
+            ).items,
+          ],
+        }
+      : { items };
   },
-  getAllBySearchAfter: async function getAll(
+  getAllBySearchAfter: async function getAllBySearchAfter(
     http: AxiosInstance,
     url: string,
     config?: AxiosRequestConfig,
@@ -92,24 +89,21 @@ export default {
       },
     });
 
-    const lastItem = last(items);
-    if (_links?.next?.href) {
-      const res = {
-        items: [
-          ...items,
-          ...(
-            await this.getAllBySearchAfter(http, url, {
-              params: {
-                ...params,
-                limit: params?.limit || 100,
-                search_after: lastItem.code,
-              },
-            })
-          ).items,
-        ],
-      };
-      return res;
-    }
-    return { items };
+    return _links?.next?.href
+      ? {
+          items: [
+            ...items,
+            ...(
+              await this.getAllBySearchAfter(http, url, {
+                params: {
+                  ...params,
+                  limit: params?.limit || 100,
+                  search_after: last(items).code,
+                },
+              })
+            ).items,
+          ],
+        }
+      : { items };
   },
 };
