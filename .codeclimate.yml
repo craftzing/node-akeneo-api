@@ -6,8 +6,7 @@ plugins:
     enabled: true
     config:
       languages:
-        - typescript
-    checks:
-      similar-code:
-        config:
-          threshold: 5
+        typescript:
+          similar-code:
+            config:
+              threshold: 95
