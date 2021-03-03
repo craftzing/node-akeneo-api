@@ -4,7 +4,7 @@
   "description": "A Node Rest Client for the Akeneo PIM",
   "author": "Jens Verbeken <jens.verbeken@craftzing.com>",
   "license": "MIT",
-  "types": "dist/cjs/index.d.ts",
+  "types": "dist/cjs/export-types.d.ts",
   "exports": {
     "import": "./dist/mjs/index.js",
     "require": "./dist/cjs/index.js"
@@ -15,8 +15,9 @@
   ],
   "scripts": {
     "build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
-    "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "build:docs": "typedoc --tsconfig tsconfig-base.json",
+    "build:types": "rimraf dist/typings && tsc -p tsconfig-cjs.json --declaration --noEmit false --emitDeclarationOnly true --allowJs false",
+    "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "prepare": "husky install",
     "lint": "eslint src --max-warnings 0",
     "test": "jest"
