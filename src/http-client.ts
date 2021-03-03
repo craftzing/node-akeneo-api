@@ -3,6 +3,21 @@ import qs from 'qs';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ClientParams } from './types';
 
+const TOKEN_PATH = '/api/oauth/v1/token';
+
+const defaultConfig = {
+  insecure: false,
+  retryOnError: true,
+  headers: {} as Record<string, unknown>,
+  httpAgent: false,
+  httpsAgent: false,
+  timeout: 30000,
+  proxy: false as const,
+  basePath: '',
+  adapter: undefined,
+  maxContentLength: 1073741824, // 1GB
+};
+
 /**
  * Create pre configured axios instance
  * @private
@@ -11,19 +26,6 @@ import { ClientParams } from './types';
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
-
-  const defaultConfig = {
-    insecure: false,
-    retryOnError: true,
-    headers: {} as Record<string, unknown>,
-    httpAgent: false,
-    httpsAgent: false,
-    timeout: 30000,
-    proxy: false as const,
-    basePath: '',
-    adapter: undefined,
-    maxContentLength: 1073741824, // 1GB
-  };
 
   const { url: baseURL } = options;
   const axiosConfig: AxiosRequestConfig = {
@@ -35,12 +37,9 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
 
   const instance = axios.create(axiosConfig) as AxiosInstance;
 
-  const TOKEN_PATH = '/api/oauth/v1/token';
-
-  const base64EncodedBuffer = Buffer.from(
+  const base64Encoded = Buffer.from(
     `${options.clientId}:${options.secret}`,
-  );
-  const base64Encoded = base64EncodedBuffer.toString('base64');
+  ).toString('base64');
 
   const getAccessToken = async () => {
     if (!accessToken) {
@@ -63,13 +62,15 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
     return accessToken;
   };
 
-  instance.interceptors.request.use(async (config) => ({
+  const requestInterceptor = async (config: AxiosRequestConfig) => ({
     ...config,
     headers: {
       ...config.headers,
       Authorization: `Bearer ${accessToken || (await getAccessToken())}`,
     },
-  }));
+  });
+
+  instance.interceptors.request.use(requestInterceptor);
 
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,
