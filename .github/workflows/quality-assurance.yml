@@ -1,4 +1,4 @@
-name: test-and-coverage
+name: Quality assurance
 
 on: [push]
 
