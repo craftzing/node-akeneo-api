@@ -1,5 +1,13 @@
+version: '2'
 exclude_patterns:
   - '**/*spec.ts'
-similar-code:
-  config:
-    threshold: 75
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - typescript
+    checks:
+      similar-code:
+        config:
+          threshold: 75
