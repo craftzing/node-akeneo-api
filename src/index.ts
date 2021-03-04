@@ -6,19 +6,7 @@
 /* eslint-disable no-underscore-dangle */
 import { AxiosInstance } from 'axios';
 import createHttpClient from './http-client';
-import {
-  ClientParams,
-  ProductModel,
-  Family,
-  Variant,
-  Attribute,
-  EntityRecord,
-  Category,
-  AttributeOption,
-  Asset,
-  Entity,
-  Product,
-} from './types';
+import { ClientParams } from './types';
 
 import raw from './endpoints/raw';
 
@@ -192,18 +180,5 @@ export const createClient = (params: ClientParams) => {
 
 export type AkeneoClientAPI = ReturnType<typeof createClient>;
 
+export * from './types';
 export default createClient;
-
-export {
-  ClientParams,
-  ProductModel,
-  Family,
-  Variant,
-  Attribute,
-  EntityRecord,
-  Category,
-  AttributeOption,
-  Asset,
-  Entity,
-  Product,
-};
