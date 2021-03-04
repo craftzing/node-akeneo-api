@@ -1,6 +1,6 @@
 {
   "name": "@craftzing/akeneo-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node Rest Client for the Akeneo PIM",
   "author": "Jens Verbeken <jens.verbeken@craftzing.com>",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "prepare": "husky install",
     "lint": "eslint src --max-warnings 0",
     "test": "jest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "publish": "npm publish --access public"
   },
   "dependencies": {
     "axios": "^0.21.1",
