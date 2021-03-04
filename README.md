@@ -1,3 +1,5 @@
+[![Node Akeneo API](art/banner.webp)](https://craftzing.com)
+
 [![Quality assurance](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml)
 [![Code style](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/90013a42a4dce3766813/test_coverage)](https://codeclimate.com/github/craftzing/akeneo-api/test_coverage)
