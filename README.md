@@ -1,4 +1,4 @@
-[![Node Akeneo API](art/banner.jpg)](https://craftzing.com)
+[![Node Akeneo API](https://github.com/craftzing/node-akeneo-api/raw/master/art/banner.jpg)](https://craftzing.com)
 
 [![Quality assurance](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/quality-assurance.yml)
 [![Code style](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml/badge.svg?branch=master)](https://github.com/craftzing/node-akeneo-api/actions/workflows/code-style.yml)

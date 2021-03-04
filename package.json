@@ -20,7 +20,8 @@
     "watch": "tsc  -w -p tsconfig.json && tsc -w -p tsconfig-cjs.json",
     "prepare": "husky install",
     "lint": "eslint src --max-warnings 0",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "axios": "^0.21.1",
