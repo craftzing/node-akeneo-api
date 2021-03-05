@@ -8,8 +8,6 @@ import { AxiosInstance } from 'axios';
 import createHttpClient from './http-client';
 import { ClientParams } from './types';
 
-import raw from './endpoints/raw';
-
 import * as endpoints from './endpoints';
 
 const ATTRIBUTES_PATH = '/api/rest/v1/attributes';
@@ -76,19 +74,18 @@ export const createClient = (params: ClientParams) => {
        *
        * @see https://api.akeneo.com/api-reference.html#get_asset_media_files__code
        */
-
       get: async (code: string) =>
-        raw.getOne(http, `${ASSET_MEDIA_FILES}/${code}`, {
+        http.get(`${ASSET_MEDIA_FILES}/${code}`, {
           responseType: 'arraybuffer',
           params: {},
         }),
     },
-    referenceEntitiesMediaFiles: {
+    referenceEntitiesMediaFile: {
       /**
        * @see https://api.akeneo.com/api-reference.html#get_reference_entity_media_files__code
        */
       get: async (code: string): Promise<any> =>
-        raw.getOne(http, `${REFERENCE_ENTITIES_MEDIA_FILES}/${code}`, {
+        http.get(`${REFERENCE_ENTITIES_MEDIA_FILES}/${code}`, {
           responseType: 'arraybuffer',
           params: {},
         }),
