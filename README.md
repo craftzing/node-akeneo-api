@@ -65,7 +65,7 @@ const akeneo = client({
   // Optionally you can also pass in axiosOptions which will be passed to the Axios instance
 });
 
-console.log(await akeneo.productModel.getAll());
+console.log(await akeneo.productModel.getAll({}));
 ```
 
 ## 📚 Docs
