@@ -7,11 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.1] - 2021-03-04
+## [1.0.1] - 2021-03-05
+
+### Breaking changes
+
+- renamed `referenceEntitiesMediaFiles` to `referenceEntitiesMediaFile` in the AkeneoClientAPI
+
+  ```diff
+  -referenceEntitiesMediaFiles
+  +referenceEntitiesMediaFile
+  ```
 
 ### Changed
 
 - Banner in README
+- Typo in README
 
 ## [1.0.0] - 2021-03-03
 
