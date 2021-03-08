@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { last } from 'ramda';
+import qs from 'qs';
 import errorHandler from '../error-handler';
 import { ListResponse } from '../types';
 
@@ -98,7 +98,10 @@ export default {
                 params: {
                   ...params,
                   limit: params?.limit || 100,
-                  search_after: last(items).code,
+                  search_after:
+                    _links?.next?.href && _links?.next?.href.split('?')[1]
+                      ? qs.parse(_links?.next?.href.split('?')[1]).search_after
+                      : '',
                 },
               })
             ).items,
