@@ -39,7 +39,8 @@ export default {
     {
       _links: {
         next: {
-          href: 'test',
+          href:
+            'https://test.cloud.akeneo.com/api/rest/v1/asset-families/model_images/assets?search_after=alr195t',
         },
       },
       _embedded: {

@@ -86,7 +86,7 @@ describe('Asset Family', () => {
       2,
       '/api/rest/v1/asset-families/test/assets',
       {
-        params: { limit: 100, search_after: 'ALR195T' },
+        params: { limit: 100, search_after: 'alr195t' },
       },
     );
   });
