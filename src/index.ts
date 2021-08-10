@@ -31,7 +31,7 @@ const wrap = <P extends Record<string, any>, R>(
  *
  * ```javascript
  * const client = akeneo({
- *   baseURL: AKENEO_API_URL,
+ *   url: AKENEO_API_URL,
  *   username: AKENEO_USERNAME,
  *   password: AKENEO_PASSWORD,
  *   clientId: AKENEO_CLIENT_ID,
@@ -175,7 +175,7 @@ export const createClient = (params: ClientParams) => {
   };
 };
 
-export type AkeneoClientAPI = ReturnType<typeof createClient>;
+export type ClientAPI = ReturnType<typeof createClient>;
 
 export * from './types';
 export default createClient;

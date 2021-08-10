@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2021-08-10
+
+### Changed
+
+- fixed inconsistency in README with parameter naming
+- remove trailing slash on url parameter on client creation
+
 ## [1.0.3] - 2021-03-18
 
 ### Changed
