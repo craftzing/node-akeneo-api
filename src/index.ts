@@ -175,7 +175,7 @@ export const createClient = (params: ClientParams) => {
   };
 };
 
-export type ClientAPI = ReturnType<typeof createClient>;
+export type AkeneoClientAPI = ReturnType<typeof createClient>;
 
 export * from './types';
 export default createClient;
