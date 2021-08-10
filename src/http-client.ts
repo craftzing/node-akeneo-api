@@ -27,7 +27,10 @@ const defaultConfig = {
  */
 const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
-  const { url: baseURL, clientId, secret, username, password } = options;
+  const { url, clientId, secret, username, password } = options;
+
+  const baseURL = url.endsWith('/') ? url.substr(0, url.length - 1) : url;
+
   const instance = axios.create({
     ...defaultConfig,
     ...(options.axiosOptions || {}),

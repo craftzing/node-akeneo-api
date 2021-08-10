@@ -57,7 +57,7 @@ With es6 imports
 import client from '@craftzing/akeneo-api';
 
 const akeneo = client({
-  baseURL,
+  url,
   username,
   password,
   clientId,
