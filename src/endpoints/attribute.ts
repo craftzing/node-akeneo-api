@@ -52,6 +52,6 @@ export const getOptions = (
     query,
   }: { attributeCode: string; query?: AttributeOptionQueryParameters },
 ): Promise<ListResponse & { items: AttributeOption[] }> =>
-  raw.getAllBySearchAfter(http, `/api/rest/v1/attributes/${attributeCode}/options`, {
+  raw.getAllByPage(http, `/api/rest/v1/attributes/${attributeCode}/options`, {
     params: query,
   });
