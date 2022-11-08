@@ -85,6 +85,7 @@ export default {
     const { items, _links } = await this.get(http, url, {
       params: {
         ...(search_after ? { search_after } : {}),
+        pagination_type: 'search_after',
         limit: 100,
       },
     });
@@ -98,6 +99,7 @@ export default {
                 params: {
                   ...params,
                   limit: params?.limit || 100,
+                  pagination_type: 'search_after',
                   search_after:
                     _links?.next?.href && _links?.next?.href.split('?')[1]
                       ? qs.parse(_links?.next?.href.split('?')[1]).search_after
