@@ -39,6 +39,6 @@ export const getAll = (
   http: AxiosInstance,
   params: { query?: CategoryQueryParameters },
 ): Promise<ListResponse & { items: Category[] }> =>
-  raw.getAllByPage(http, `/api/rest/v1/categories`, {
+  raw.getAllBySearchAfter(http, `/api/rest/v1/categories`, {
     params,
   });
