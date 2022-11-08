@@ -78,8 +78,6 @@ describe('Category', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/categories', {
       params: {
         limit: 100,
-        page: 1,
-        with_count: true,
       },
     });
     expect(categories).toHaveLength(1);

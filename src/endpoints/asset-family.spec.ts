@@ -49,8 +49,6 @@ describe('Asset Family', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families', {
       params: {
         limit: 100,
-        page: 1,
-        with_count: true,
       },
     });
     expect(assetFamilies).toHaveLength(1);

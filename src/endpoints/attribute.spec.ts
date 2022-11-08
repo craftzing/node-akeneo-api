@@ -76,8 +76,6 @@ describe('Attribute', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/attributes', {
       params: {
         limit: 100,
-        page: 1,
-        with_count: true,
       },
     });
     expect(attributes).toHaveLength(1);
@@ -96,8 +94,6 @@ describe('Attribute', () => {
       {
         params: {
           limit: 100,
-          page: 1,
-          with_count: true,
         },
       },
     );
@@ -118,7 +114,7 @@ describe('Attribute', () => {
     expect(axios.get).toBeCalledWith(
       '/api/rest/v1/attributes/back_material/options',
       {
-        params: { limit: 100, page: 1, with_count: true },
+        params: { limit: 100, },
       },
     );
     expect(attributes).toHaveLength(1);
