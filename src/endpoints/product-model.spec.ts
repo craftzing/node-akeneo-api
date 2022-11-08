@@ -66,10 +66,8 @@ describe('Product Model', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {
       params: {
         limit: 100,
-        page: 1,
-        with_count: true,
       },
     });
-    expect(products).toHaveLength(2);
+    expect(products).toHaveLength(1);
   });
 });

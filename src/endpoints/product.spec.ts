@@ -71,8 +71,6 @@ describe('Product', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/products', {
       params: {
         limit: 100,
-        page: 1,
-        with_count: true,
       },
     });
     expect(products).toHaveLength(1);
