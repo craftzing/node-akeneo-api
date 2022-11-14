@@ -66,6 +66,7 @@ describe('Product Model', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/product-models', {
       params: {
         limit: 100,
+        pagination_type: "search_after",
       },
     });
     expect(products).toHaveLength(1);
