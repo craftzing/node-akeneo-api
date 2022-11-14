@@ -1,6 +1,6 @@
 {
   "name": "@craftzing/akeneo-api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Node Rest Client for the Akeneo PIM",
   "author": "Jens Verbeken <jens.verbeken@craftzing.com>",
   "license": "MIT",
