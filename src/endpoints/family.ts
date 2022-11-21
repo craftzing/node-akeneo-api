@@ -14,7 +14,7 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: FamilyQueryParameters },
-): Promise<ListResponse & { items: Family[] }> =>
+): Promise<ListResponse<Family>> =>
   raw.get(http, `/api/rest/v1/families`, {
     params: {
       ...params.query,
@@ -29,7 +29,7 @@ export const getVariants = (
     familyCode: string;
     query?: FamilyVariantQueryParameters;
   },
-): Promise<ListResponse & { items: Variant[] }> =>
+): Promise<ListResponse<Variant>> =>
   raw.get(http, `/api/rest/v1/families/${params.familyCode}/variants`, {
     params: {
       ...params.query,

@@ -3,8 +3,8 @@ import axios from 'axios';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
-import mockError from '../../mocks/error';
-import mockCategoryResponse from '../../mocks/category';
+import mockError from '../../mocks/error.mock';
+import mockCategoryResponse from '../../mocks/category.mock';
 
 import { getOne, get, getAll } from './category';
 

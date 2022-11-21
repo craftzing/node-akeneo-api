@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import mockResponse from '../../mocks/asset-family';
+import mockResponse from '../../mocks/asset-family.mock';
 
 import {
   getOne,
@@ -49,7 +49,7 @@ describe('Asset Family', () => {
     expect(axios.get).toBeCalledWith('/api/rest/v1/asset-families', {
       params: {
         limit: 100,
-        pagination_type: "search_after",
+        pagination_type: 'search_after',
       },
     });
     expect(assetFamilies).toHaveLength(1);
@@ -79,13 +79,17 @@ describe('Asset Family', () => {
     expect(axios.get).toHaveBeenNthCalledWith(
       1,
       '/api/rest/v1/asset-families/test/assets',
-      { params: { limit: 100, pagination_type: "search_after" } },
+      { params: { limit: 100, pagination_type: 'search_after' } },
     );
     expect(axios.get).toHaveBeenNthCalledWith(
       2,
       '/api/rest/v1/asset-families/test/assets',
       {
-        params: { limit: 100, pagination_type: "search_after", search_after: 'alr195t' },
+        params: {
+          limit: 100,
+          pagination_type: 'search_after',
+          search_after: 'alr195t',
+        },
       },
     );
   });

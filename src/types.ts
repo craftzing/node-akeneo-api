@@ -27,12 +27,14 @@ export type ClientParams = {
   axiosOptions?: AxiosRequestConfig;
 };
 
+export type PaginationType = 'page' | 'search_after';
+
 export type ProductModelQueryParameters = {
   search?: string;
   scope?: string;
   locales?: string;
   attributes?: string;
-  pagination_type?: string;
+  pagination_type?: PaginationType;
   page?: number;
   search_after?: string;
   limit?: number;
@@ -44,7 +46,7 @@ export type ProductQueryParameters = {
   scope?: string;
   locales?: string;
   attributes?: string;
-  pagination_type?: string;
+  pagination_type?: PaginationType;
   page?: number;
   search_after?: string;
   limit?: number;
@@ -106,12 +108,13 @@ export type AssetQueryParameters = {
   search_after?: string;
 };
 
-export type ListResponse = {
+export type ListResponse<T> = {
   items_count?: number;
   current_page?: number;
+  items: T[];
 };
 
-type Assocation = {
+type Association = {
   products: string[];
   product_models: string[];
   groups: string[];
@@ -125,8 +128,8 @@ export type ProductModel = {
   values: Record<string, any>;
   created: string;
   updated: string;
-  associations: Record<string, Assocation>;
-  quantified_assoications: Record<string, Assocation>;
+  associations: Record<string, Association>;
+  quantified_assoications: Record<string, Association>;
   metadata: Record<string, any>;
 };
 
@@ -138,10 +141,10 @@ export type Product = {
   groups: string[];
   parent: string;
   values: Record<string, any>;
-  associations: Record<string, Assocation>;
+  associations: Record<string, Association>;
   created: string;
   updated: string;
-  quantified_assoications: Record<string, Assocation>;
+  quantified_assoications: Record<string, Association>;
   metadata: Record<string, any>;
 };
 

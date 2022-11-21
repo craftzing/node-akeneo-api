@@ -1,10 +1,10 @@
 import { AxiosInstance } from 'axios';
 import {
-  ListResponse,
   Asset,
-  AssetQueryParameters,
   AssetFamily,
   AssetFamilyQueryParameters,
+  AssetQueryParameters,
+  ListResponse,
 } from '../types';
 import raw from './raw';
 
@@ -14,7 +14,7 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: AssetFamilyQueryParameters },
-): Promise<ListResponse & { items: AssetFamily[] }> =>
+): Promise<ListResponse<AssetFamily>> =>
   raw.get(http, `/api/rest/v1/asset-families`, {
     params: {
       ...params.query,
@@ -44,7 +44,7 @@ export const getOne = (
 export const getAll = (
   http: AxiosInstance,
   { query }: { query?: AssetFamilyQueryParameters },
-): Promise<ListResponse & { items: AssetFamily[] }> =>
+): Promise<ListResponse<AssetFamily>> =>
   raw.getAllBySearchAfter(http, `/api/rest/v1/asset-families`, {
     params: query,
   });
@@ -57,7 +57,7 @@ export const getAssets = (
     assetFamilyCode,
     query,
   }: { assetFamilyCode: string; query?: AssetQueryParameters },
-): Promise<ListResponse & { items: Asset[] }> =>
+): Promise<ListResponse<Asset>> =>
   raw.get(http, `/api/rest/v1/asset-families/${assetFamilyCode}/assets`, {
     params: query,
   });
@@ -86,7 +86,7 @@ export const getAssetsAll = (
     assetFamilyCode,
     query,
   }: { assetFamilyCode: string; query?: AssetQueryParameters },
-): Promise<ListResponse & { items: Asset[] }> =>
+): Promise<ListResponse<Asset>> =>
   raw.getAllBySearchAfter(
     http,
     `/api/rest/v1/asset-families/${assetFamilyCode}/assets`,

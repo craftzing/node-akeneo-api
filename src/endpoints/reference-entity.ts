@@ -14,7 +14,7 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   { query }: { query?: ReferenceEntityQueryParameters },
-): Promise<ListResponse & { items: Entity[] }> =>
+): Promise<ListResponse<Entity>> =>
   raw.get(http, `/api/rest/v1/reference-entities`, {
     params: query,
   });
@@ -30,7 +30,7 @@ export const getRecords = (
     referenceEntityCode: string;
     query?: ReferenceEntityRecordQueryParameters;
   },
-): Promise<ListResponse & { items: EntityRecord[] }> =>
+): Promise<ListResponse<EntityRecord>> =>
   raw.get(
     http,
     `/api/rest/v1/reference-entities/${referenceEntityCode}/records`,
