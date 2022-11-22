@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import qs from 'qs';
+import * as querystring from 'querystring';
 import errorHandler from '../error-handler';
 import { ListResponse } from '../types';
 
@@ -10,8 +10,7 @@ export default {
     url: string,
     config: AxiosRequestConfig,
   ): Promise<
-    ListResponse & {
-      items: any[];
+    ListResponse<any> & {
       _links: any;
     }
   > {
@@ -47,7 +46,7 @@ export default {
     http: AxiosInstance,
     url: string,
     { params = {} }: AxiosRequestConfig,
-  ): Promise<ListResponse & { items: any[] }> {
+  ): Promise<ListResponse<any>> {
     const page = params?.page || 1;
     const { items_count = 0, items } = await this.get(http, url, {
       params: {
@@ -79,36 +78,36 @@ export default {
     http: AxiosInstance,
     url: string,
     config?: AxiosRequestConfig,
-  ): Promise<ListResponse & { items: any[] }> {
+  ): Promise<ListResponse<any>> {
     const params = config?.params;
-    const search_after = params?.search_after || '';
     const { items, _links } = await this.get(http, url, {
       params: {
-        ...(search_after ? { search_after } : {}),
+        ...(params?.search_after ? { search_after: params.search_after } : {}),
         pagination_type: 'search_after',
         limit: 100,
       },
     });
 
-    return _links?.next?.href
-      ? {
-          items: [
-            ...items,
-            ...(
-              await this.getAllBySearchAfter(http, url, {
-                params: {
-                  ...params,
-                  limit: params?.limit || 100,
-                  pagination_type: 'search_after',
-                  search_after:
-                    _links?.next?.href && _links?.next?.href.split('?')[1]
-                      ? qs.parse(_links?.next?.href.split('?')[1]).search_after
-                      : '',
-                },
-              })
-            ).items,
-          ],
-        }
-      : { items };
+    const nextUrl = _links?.next?.href;
+    if (!nextUrl) return { items };
+
+    const search_after =
+      querystring.parse(nextUrl.split('?').at(1))?.search_after || '';
+
+    return {
+      items: [
+        ...items,
+        ...(
+          await this.getAllBySearchAfter(http, url, {
+            params: {
+              ...params,
+              limit: params?.limit || 100,
+              pagination_type: 'search_after',
+              search_after,
+            },
+          })
+        ).items,
+      ],
+    };
   },
 };

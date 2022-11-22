@@ -8,7 +8,7 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   params: { query?: CategoryQueryParameters },
-): Promise<ListResponse & { items: Category[] }> =>
+): Promise<ListResponse<Category>> =>
   raw.get(http, `/api/rest/v1/categories`, {
     params: {
       ...params.query,
@@ -38,7 +38,7 @@ export const getOne = (
 export const getAll = (
   http: AxiosInstance,
   params: { query?: CategoryQueryParameters },
-): Promise<ListResponse & { items: Category[] }> =>
+): Promise<ListResponse<Category>> =>
   raw.getAllByPage(http, `/api/rest/v1/categories`, {
     params,
   });

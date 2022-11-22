@@ -8,7 +8,7 @@ import raw from './raw';
 export const get = (
   http: AxiosInstance,
   { query }: { query?: ProductQueryParameters },
-): Promise<ListResponse & { items: Product[] }> =>
+): Promise<ListResponse<Product>> =>
   raw.get(http, `/api/rest/v1/products`, {
     params: query,
   });
@@ -36,7 +36,15 @@ export const getOne = (
 export const getAll = (
   http: AxiosInstance,
   { query = {} }: { query?: ProductQueryParameters },
-): Promise<ListResponse & { items: Product[] }> =>
-  raw.getAllBySearchAfter(http, `/api/rest/v1/products`, {
+): Promise<ListResponse<Product>> => {
+  // support legacy pagination_type "page"
+  if (query?.pagination_type === 'page') {
+    return raw.getAllByPage(http, `/api/rest/v1/products`, {
+      params: query,
+    });
+  }
+
+  return raw.getAllBySearchAfter(http, `/api/rest/v1/products`, {
     params: query,
   });
+};

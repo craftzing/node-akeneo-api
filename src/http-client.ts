@@ -20,7 +20,7 @@ const defaultConfig = {
 };
 
 /**
- * Create pre configured axios instance
+ * Create pre-configured axios instance
  * @private
  * @param {ClientParams} options - Initialization parameters for the HTTP client
  * @return {AxiosInstance} Initialized axios instance
@@ -29,7 +29,7 @@ const createHttpClient = (options: ClientParams): AxiosInstance => {
   let accessToken = '';
   const { url, clientId, secret, username, password } = options;
 
-  const baseURL = url.endsWith('/') ? url.substr(0, url.length - 1) : url;
+  const baseURL = url.replace(/\/+$/, '');
 
   const instance = axios.create({
     ...defaultConfig,
