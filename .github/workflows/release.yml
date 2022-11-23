@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Release
         uses: docker://antonyurchenko/git-release:latest
@@ -20,4 +20,3 @@ jobs:
           PRE_RELEASE: 'false'
           CHANGELOG_FILE: 'CHANGELOG.md'
           ALLOW_EMPTY_CHANGELOG: 'false'
-          ALLOW_TAG_PREFIX: 'true'

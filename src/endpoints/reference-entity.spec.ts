@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import mockResponse from '../../mocks/reference-entity';
+import mockResponse from '../../mocks/reference-entity.mock';
 
 import { get, getRecords } from './reference-entity';
 

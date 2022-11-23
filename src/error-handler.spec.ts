@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import errorHandler from './error-handler';
 
-import mockError from '../mocks/error';
+import mockError from '../mocks/error.mock';
 
 describe('errorHandler', () => {
   test('Throws well formed error', async () => {

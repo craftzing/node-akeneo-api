@@ -12,7 +12,7 @@ export default {
     },
   },
   getAll: {
-    items_count: 105,
+    items_count: 101,
     _embedded: {
       items: [
         {

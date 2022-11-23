@@ -1,4 +1,4 @@
-const category = {
+const categoryMock = {
   _links: {
     self: {
       href: 'https://example.com/api/rest/v1/categories/master',
@@ -18,14 +18,14 @@ export default {
     current_page: 1,
     count: 1,
     _embedded: {
-      items: [category],
+      items: [categoryMock],
     },
   },
   get: {
     current_page: 1,
     _embedded: {
-      items: [category],
+      items: [categoryMock],
     },
   },
-  getOne: category,
+  getOne: categoryMock,
 };

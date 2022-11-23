@@ -1,4 +1,4 @@
-const assetFamily = {
+const assetFamilyMock = {
   code: 'images',
   labels: {
     en_GB: 'images',
@@ -25,14 +25,14 @@ const assetFamilyAsset = {
 export default {
   get: {
     _embedded: {
-      items: [assetFamily],
+      items: [assetFamilyMock],
     },
   },
-  getOne: assetFamily,
+  getOne: assetFamilyMock,
   getAll: {
     count: 1,
     _embedded: {
-      items: [assetFamily],
+      items: [assetFamilyMock],
     },
   },
   getAssetsAll: [
