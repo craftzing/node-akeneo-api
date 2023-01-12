@@ -135,6 +135,7 @@ export type ProductModel = {
 
 export type Product = {
   identifier: string;
+  uuid?: string;
   enabled: boolean;
   family: string;
   categories: string[];
