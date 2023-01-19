@@ -129,7 +129,7 @@ export type ProductModel = {
   created: string;
   updated: string;
   associations: Record<string, Association>;
-  quantified_assoications: Record<string, Association>;
+  quantified_associations: Record<string, Association>;
   metadata: Record<string, any>;
 };
 
@@ -144,7 +144,7 @@ export type Product = {
   associations: Record<string, Association>;
   created: string;
   updated: string;
-  quantified_assoications: Record<string, Association>;
+  quantified_associations: Record<string, Association>;
   metadata: Record<string, any>;
 };
 
