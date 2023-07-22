@@ -110,4 +110,34 @@ export default {
       ],
     };
   },
+  patch: function patch(
+    http: AxiosInstance,
+    url: string,
+    data: any,
+    config?: AxiosRequestConfig,
+  ): Promise<any> {
+    return http
+      .patch(url, data, {
+        ...config,
+      })
+      .then((response) => {
+        const { data: responseData } = response;
+        return responseData;
+      }, errorHandler);
+  },
+  post: function post(
+    http: AxiosInstance,
+    url: string,
+    data: any,
+    config?: AxiosRequestConfig,
+  ): Promise<any> {
+    return http
+      .post(url, data, {
+        ...config,
+      })
+      .then((response) => {
+        const { data: responseData } = response;
+        return responseData;
+      })
+  }
 };

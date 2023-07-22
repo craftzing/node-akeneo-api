@@ -1,14 +1,15 @@
 import axios from 'axios';
-
+import FormData from 'form-data';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import createError from 'axios/lib/core/createError';
 import mockError from '../../mocks/error.mock';
 import mockProductResponse from '../../mocks/product.mock';
 
-import { getOne, get, getAll } from './product';
+import { getOne, get, getAll, uploadImage } from './product';
 
 const axiosGetSpy = jest.spyOn(axios, 'get');
+const axiosPostSpy = jest.spyOn(axios, 'post');
 
 const mockFunction = (data: Record<string, any>) => async () =>
   Promise.resolve({ data });
@@ -95,4 +96,18 @@ describe('Product', () => {
     });
     expect(products).toHaveLength(1);
   });
+
+  test('uploadImage with valid parameters', async () => {
+    const identifier = 'test';
+    const attribute = 'image';
+    const filePath = './mocks/mockImage.png';
+
+    axiosPostSpy.mockImplementation(async () => Promise.resolve({ data: {} }));
+    await uploadImage(axios, identifier, attribute, filePath);
+
+    expect(axiosPostSpy.mock.calls).toHaveLength(1);
+    expect(axiosPostSpy.mock.calls[0][1]).toBeInstanceOf(FormData);
+    expect(axiosPostSpy.mock.calls[0][2]).toHaveProperty('headers');
+    expect(axiosPostSpy.mock.calls[0][0]).toBe('/api/rest/v1/media-files');
+  })
 });

@@ -1,8 +1,13 @@
 {
   "name": "@craftzing/akeneo-api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A Node Rest Client for the Akeneo PIM",
   "author": "Jens Verbeken <jens.verbeken@craftzing.com>",
+  "contributors": [
+    {
+      "name": "Lars Buur",
+      "email": "lars@buur.org"
+    }],
   "license": "MIT",
   "types": "dist/cjs/index.d.ts",
   "exports": {
@@ -26,6 +31,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "form-data": "^4.0.0",
     "qs": "^6.9.6",
     "ramda": "^0.27.1"
   },
