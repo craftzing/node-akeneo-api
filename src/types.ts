@@ -42,7 +42,7 @@ export type ProductModelQueryParameters = {
 };
 
 export type ProductQueryParameters = {
-  search?: string;
+  search?: string | Record<string, any>;
   scope?: string;
   locales?: string;
   attributes?: string;
@@ -116,8 +116,8 @@ export type ListResponse<T> = {
 
 type Association = {
   products: string[];
-  product_models: string[];
-  groups: string[];
+  product_models?: string[];
+  groups?: string[];
 };
 export type ProductModel = {
   code: string;
@@ -227,6 +227,11 @@ export type Category<T = KeyValueMap> = {
   code: string;
   parent?: string;
   labels: T;
+  updated: string;
+  image?: string; // we have extended the category entity to include image
+  links?: string; // we have extended the category entity to include image links
+  imagename?: string; // we have extended the category entity to include image name
+  description?: KeyValueMap; // we have extended the category entity to include description
 };
 
 export type AssetFamily = {

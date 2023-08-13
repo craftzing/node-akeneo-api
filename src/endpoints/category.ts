@@ -42,3 +42,14 @@ export const getAll = (
   raw.getAllByPage(http, `/api/rest/v1/categories`, {
     params,
   });
+
+export const update = (
+  http: AxiosInstance,
+  category: Category & Pick<Category, 'code'>
+): Promise<Category> => raw.patch(http, `/api/rest/v1/categories/${category.code}`, category);
+
+export const create = (
+  http: AxiosInstance,
+  category: Category & { code: string },
+): Promise<Category> => raw.post(http, `/api/rest/v1/categories`, category);
+

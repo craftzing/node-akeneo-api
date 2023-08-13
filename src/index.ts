@@ -50,6 +50,8 @@ export const createClient = (params: ClientParams) => {
       getOne: wrap(http, endpoints.category.getOne),
       get: wrap(http, endpoints.category.get),
       getAll: wrap(http, endpoints.category.getAll),
+      update: wrap(http, endpoints.category.update),
+      create: wrap(http, endpoints.category.create),
     },
     productModel: {
       getOne: wrap(http, endpoints.productModel.getOne),
@@ -60,6 +62,10 @@ export const createClient = (params: ClientParams) => {
       getOne: wrap(http, endpoints.product.getOne),
       get: wrap(http, endpoints.product.get),
       getAll: wrap(http, endpoints.product.getAll),
+      update: wrap(http, endpoints.product.update),
+      create: wrap(http, endpoints.product.create),
+      uploadImage: async (identifier: string, attribute: string, filePath: string) => 
+        endpoints.product.uploadImage(http, identifier, attribute, filePath )
     },
     assetFamily: {
       getOne: wrap(http, endpoints.assetFamily.getOne),
