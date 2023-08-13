@@ -45,7 +45,7 @@ export const getAll = (
 
 export const update = (
   http: AxiosInstance,
-  category: Category & { code: string },
+  category: Category & Pick<Category, 'code'>
 ): Promise<Category> => raw.patch(http, `/api/rest/v1/categories/${category.code}`, category);
 
 export const create = (
