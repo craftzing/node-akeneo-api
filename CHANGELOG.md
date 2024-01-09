@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.12] - 2024-01-09
+
+### Changed
+
+- ensure we can still filter when calling all by search after
+
 ## [1.0.4] - 2021-08-10
 
 ### Changed
