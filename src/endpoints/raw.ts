@@ -82,6 +82,7 @@ export default {
     const params = config?.params;
     const { items, _links } = await this.get(http, url, {
       params: {
+        ...params,
         ...(params?.search_after ? { search_after: params.search_after } : {}),
         pagination_type: 'search_after',
         limit: 100,
